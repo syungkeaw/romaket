@@ -83,4 +83,18 @@ class ShopItem extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+    public function getItem()
+    {
+        return $this->hasOne(Item::className(), [
+            'source_id' => 'item_id'
+        ]);
+    }
+
+    public function getShop()
+    {
+        return $this->hasOne(Shop::className(), [
+            'id' => 'shop_id'
+        ]);
+    }
 }

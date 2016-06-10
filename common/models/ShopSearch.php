@@ -43,6 +43,8 @@ class ShopSearch extends Shop
     {
         $query = Shop::find();
 
+        $query->where(['created_by' => Yii::$app->user->identity->id]);
+        
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

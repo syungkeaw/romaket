@@ -104,7 +104,10 @@ class ShopController extends Controller
             $shop_item_model[$slot] = new ShopItem();
         }
 
-        $this->saveShop($shop_model, $shop_item_model);
+        foreach ($shop_item_model as $key => $model)
+            $shop_item_model_old[$key] = clone $model;
+
+        $this->saveShop($shop_model, $shop_item_model, $shop_item_model_old);
         
         return $this->render('update', [
             'shop_model' => $shop_model,
@@ -142,16 +145,22 @@ class ShopController extends Controller
         }
     }
 
-    protected function saveShop($shop_model, $shop_item_model)
+    protected function saveShop($shop_model, $shop_item_model, $shop_item_model_old = null)
     {
         if ($shop_model->load(Yii::$app->request->post()) && $shop_model->validate()) {
             if (Model::loadMultiple($shop_item_model, Yii::$app->request->post()) && Model::validateMultiple($shop_item_model)) {
                 if($shop_model->save()){
-                    foreach ($shop_item_model as $model) {
-                        if($model->item_id) {
-                            $model->shop_id = $shop_model->id;
-                            $model->save();
+                    foreach ($shop_item_model as $key => $model) {
+                        if(is_null($shop_item_model_old)|| ($shop_item_model_old[$key]->item_id != $model->item_id
+                                                        || $shop_item_model_old[$key]->amount != $model->amount
+                                                        || $shop_item_model_old[$key]->price != $model->price))
+                        {
+                            if($model->item_id) {
+                                $model->shop_id = $shop_model->id;
+                                $model->save();
+                            }
                         }
+
                     }
                 }
                 return $this->redirect(['view', 'id' => $shop_model->id]);
