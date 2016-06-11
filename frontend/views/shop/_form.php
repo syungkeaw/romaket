@@ -105,6 +105,14 @@ $this->registerJs("
         }
     });
 
+    $( 'ul.select2-results' ).bind( 'mousewheel DOMMouseScroll', function ( e ) {
+        var e0 = e.originalEvent,
+            delta = e0.wheelDelta || -e0.detail;
+
+        this.scrollTop += ( delta < 0 ? 1 : -1 ) * 100;
+        e.preventDefault();
+    });
+    
     $('input.select2ex').filter(function() { return $(this).val(); }).each(function(){
         var default_value = $(this).val();
         var item = _.filter(datax, function (e) { return e.id == default_value; });
@@ -152,30 +160,38 @@ $this->registerCss("
         </div>
         <div class="col-md-6 text-center">
             <div class="map-picker">
-            <?= Html::img(Yii::$app->params['map_path'].'map-1x.jpg') ?>
+            <?= Html::img(Yii::$app->params['map_path'].'map-1.jpg') ?>
             </div>
         </div>
     </div>
 
-    <div class="row item">
-        <div class="col-sm-6">Item Name</div>
-        <div class="col-sm-3">Amount</div>
-        <div class="col-sm-3">Price</div>
-    </div>
-
-    <?php
-    $shop_item_model = is_array($shop_item_model) ? $shop_item_model : [$shop_item_model];
-    for($slot = 0; $slot <= 11; $slot++){
-    ?>
-        <div class="row item">
-            <div class="col-sm-6"> 
-                <?= $form->field($shop_item_model[$slot], "[$slot]item_id")->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])->label(false) ?> 
-            </div>
-            <div class="col-sm-3"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </div>
-            <div class="col-sm-3"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </div>
-        </div>
-    <?php } ?>
-    
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Item Name</th>
+                <th>Amount</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $shop_item_model = is_array($shop_item_model) ? $shop_item_model : [$shop_item_model];
+            for($slot = 0; $slot <= 11; $slot++){
+            ?>
+                <tr>
+                    <td class="col-sd-1"><?= $slot+1 ?></td>
+                    <td class="col-sd-7"><?= $form->field($shop_item_model[$slot], "[$slot]item_id")
+                            ->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])
+                            ->label(false) 
+                        ?>
+                    </td>
+                    <td class="col-sd-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
+                    <td class="col-sd-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
+                </tr>
+            <?php } ?>
+        <tbody>
+    </table>
     <div class="form-group">
         <?= Html::submitButton($shop_model->isNewRecord ? 'Open Shop' : 'Update', ['class' => $shop_model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

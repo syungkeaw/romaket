@@ -22,7 +22,9 @@ use yii\helpers\ArrayHelper;
                 'attribute' => 'item.item_name',
                 'label' => 'Items',
                 'value' => function($model){
-                    return Html::img(Yii::$app->params['item_small_image_url']. ItemHelper::getImgFileName($model->item)) .' '. $model->item->nameSlot;
+                    return Html::img(Yii::$app->params['item_small_image_url'].
+                        ItemHelper::getImgFileName($model->item)) .' '.
+                        $model->item['nameSlot'];
                 },
                 'format' => 'html',
                 'filter' => Typeahead::widget([
