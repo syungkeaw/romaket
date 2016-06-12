@@ -19,6 +19,13 @@ class m160606_115924_create_shop_item extends Migration
             'price' => $this->integer(),
             'amount' => $this->integer(),
             'status' => $this->integer(),
+            'enhancement' => $this->integer(1),
+            'element' => $this->integer(1),
+            'very' => $this->integer(1),
+            'card_1' => $this->integer(),
+            'card_2' => $this->integer(),
+            'card_3' => $this->integer(),
+            'card_4' => $this->integer(),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ]);

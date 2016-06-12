@@ -26,6 +26,20 @@ class Item extends \yii\db\ActiveRecord
 {
     private $_job_ids;
 
+    private static $_element = [
+        '',
+        'wind',
+        'fire',
+        'water',
+        'earth',
+    ];
+
+    private static $_very = [
+        '',
+        1 => 'very strong',
+        2 => 'very very strong',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -69,6 +83,16 @@ class Item extends \yii\db\ActiveRecord
             'item_weapon_lvl' => 'Item Weapon Lvl',
             'item_description' => 'Item Description',
         ];
+    }
+
+    public static function getElements()
+    {
+        return self::$_element;
+    }
+
+    public static function getVeries()
+    {
+        return self::$_very;
     }
 
     public function getJobIds()

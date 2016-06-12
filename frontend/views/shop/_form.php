@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 use frontend\assets\Select23Asset;
+use common\models\Item;
 
 Select23Asset::register($this);
 
@@ -182,10 +183,59 @@ $this->registerCss("
             ?>
                 <tr>
                     <td class="col-sm-1"><?= $slot+1 ?></td>
-                    <td class="col-sm-7"><?= $form->field($shop_item_model[$slot], "[$slot]item_id")
-                            ->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])
-                            ->label(false) 
-                        ?>
+                    <td class="col-sm-7">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]item_id")
+                                    ->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])
+                                    ->label(false) 
+                                ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]enhancement")
+                                    ->dropDownList(range(0,10))
+                                    ->label(false)
+                                ?>
+                            </div>
+                            <div class="col-sm-2 weapon">
+                                <?= Html::checkbox('isElement') ?>
+                            </div>
+                        </div>
+                        <div class="row weapon armor">
+                            <div class="col-md-3 card-slot">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]card_1")
+                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->label(false) ?>
+                            </div>
+                            <div class="col-md-3 card-slot">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]card_2")
+                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->label(false) ?>
+                            </div>
+                            <div class="col-md-3 card-slot">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]card_3")
+                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->label(false) ?>
+                            </div>
+                            <div class="col-md-3 card-slot">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]card_4")
+                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->label(false) ?>
+                            </div>
+                        </div>
+
+                        <div class="row weapon element">
+                            <div class="col-md-3">
+                                <?= $form->field($shop_item_model[$slot], "[$slot]very")
+                                    ->dropDownList(Item::getVeries())
+                                    ->label(false) ?>
+                            </div>
+                            <div class="col-md-3">    
+                                <?= $form->field($shop_item_model[$slot], "[$slot]element")
+                                    ->dropDownList(Item::getElements())
+                                    ->label(false) ?>
+                            </div>
+                        </div>
                     </td>
                     <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
                     <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
