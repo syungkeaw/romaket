@@ -83,7 +83,7 @@ class Item extends \yii\db\ActiveRecord
 
     public function getNameSlot()
     {
-        return in_array($this->item_type_id, [4, 5]) ? $this->item_name. ' ['. $this->item_slot .']' : $this->item_name;
+        return in_array($this->item_type_id, [4, 5]) && $this->item_slot > 0 ? $this->item_name. ' ['. $this->item_slot .']' : $this->item_name;
     }
 
     public function getItemJobs()

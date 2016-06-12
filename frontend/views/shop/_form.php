@@ -25,14 +25,11 @@ $maps = [
     ], 
 ];
 
-$datax = '';
+$items = '';
 
 // echo '<pre>', print_r(ArrayHelper::map($item_model, 'source_id', 'item_name')); die;
-foreach(ArrayHelper::map($item_model, 'source_id', 'nameSlot') as $k => $x){
-    $datax .= '{
-              id: "'.$k.'",
-              text: "'.$x.'"
-            },';
+foreach($item_model as $item){
+    $items .= '{id: "'.$item->source_id.'",text: "'.$item->nameSlot.'",type: "'.$item->item_type_id.'"},';
 }
 
 $this->registerJs("
@@ -79,9 +76,9 @@ $this->registerJs("
         );
     }
 
-    var datax = [".$datax."];
+    var items = [".$items."];
     $('.select2ex').select2({
-        data: datax,
+        data: items,
         formatLoadMore   : 'Loading more...',
         formatResult: repoFormatResult,
         formatSelection: repoFormatSelection,
@@ -105,6 +102,10 @@ $this->registerJs("
         }
     });
 
+    // $('.select2ex').change(function(){
+    //     alert($(this).select2('data').type);
+    // });
+
     $( 'ul.select2-results' ).bind( 'mousewheel DOMMouseScroll', function ( e ) {
         var e0 = e.originalEvent,
             delta = e0.wheelDelta || -e0.detail;
@@ -115,10 +116,10 @@ $this->registerJs("
     
     $('input.select2ex').filter(function() { return $(this).val(); }).each(function(){
         var default_value = $(this).val();
-        var item = _.filter(datax, function (e) { return e.id == default_value; });
+        var item = _.filter(items, function (e) { return e.id == default_value; });
         $(this).parent().find('.select2-chosen').html(getSelectTemplate(item[0]));
     });
-
+  
    function repoFormatResult(item) {
         return getSelectTemplate(item);
    }
@@ -130,7 +131,7 @@ $this->registerJs("
    function getSelectTemplate(item) {
         var card = 'card';
         var item_img = item.text.toLowerCase().indexOf(card) > -1 ? card : item.id;
-        return '<div class=\"span2\"><img src=\"http://imgs.ratemyserver.net/items/small/' + item_img + '.gif\" /> '+ item.text +'</div>';
+        return '<div class=\"span2\"><img src=\"".Yii::$app->params['item_small_image_url']."' + item_img + '.gif\" /> '+ item.text +'</div>';
    }
 
 ", View::POS_READY);
@@ -180,14 +181,14 @@ $this->registerCss("
             for($slot = 0; $slot <= 11; $slot++){
             ?>
                 <tr>
-                    <td class="col-sd-1"><?= $slot+1 ?></td>
-                    <td class="col-sd-7"><?= $form->field($shop_item_model[$slot], "[$slot]item_id")
+                    <td class="col-sm-1"><?= $slot+1 ?></td>
+                    <td class="col-sm-7"><?= $form->field($shop_item_model[$slot], "[$slot]item_id")
                             ->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])
                             ->label(false) 
                         ?>
                     </td>
-                    <td class="col-sd-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
-                    <td class="col-sd-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
+                    <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
+                    <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
                 </tr>
             <?php } ?>
         <tbody>
