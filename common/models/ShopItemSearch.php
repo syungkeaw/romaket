@@ -16,7 +16,7 @@ class ShopItemSearch extends ShopItem
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name']);
+        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name', 'shop.character', 'option']);
     }
 
     /**
@@ -25,8 +25,8 @@ class ShopItemSearch extends ShopItem
     public function rules()
     {
         return [
-            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at'], 'integer'],
-            [['item_id', 'item.item_name', 'shop.shop_name'], 'string'],
+            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at', 'enhancement'], 'integer'],
+            [['item_id', 'item.item_name', 'shop.shop_name', 'shop.character', 'option'], 'string'],
         ];
     }
 
@@ -59,9 +59,12 @@ class ShopItemSearch extends ShopItem
                 'attributes' => [
                    'item.item_name', 
                    'shop.shop_name',
+                   'shop.character',
                    'price', 
                    'amount', 
                    'updated_at', 
+                   'enhancement', 
+                   'option',
                 ],
                 'defaultOrder' => ['updated_at' => SORT_DESC],
             ],
@@ -84,12 +87,18 @@ class ShopItemSearch extends ShopItem
             'shop_id' => $this->shop_id,
             'price' => $this->price,
             'amount' => $this->amount,
+            'enhancement' => $this->enhancement,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'item.item_name', $this->getAttribute('item.item_name')]);
         $query->andFilterWhere(['like', 'shop.shop_name', $this->getAttribute('shop.shop_name')]);
+        $query->andFilterWhere(['like', 'shop.character', $this->getAttribute('shop.character')]);
+
+        // if(preg_match('/\\[\\d\\]/', $this->getAttribute('item.item_name'), $matches)){
+        //     $query->andFilterWhere(['item.item_slot' => str_replace(['[', ']'], '', $matches[0])]);
+        // }
 
         return $dataProvider;
     }

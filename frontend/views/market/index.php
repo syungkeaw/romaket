@@ -6,10 +6,29 @@ use yii\widgets\Pjax;
 use common\classes\ItemHelper;
 use kartik\typeahead\Typeahead;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
+use common\models\Item;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Ro Market';
+$elements = Item::getElements();
+$very = Item::getVeries();
+$label = [
+    '',
+    ['label' => 'success', 'icon' => '996'],
+    ['label' => 'danger', 'icon' => '994'],
+    ['label' => 'info', 'icon' => '995'],
+    ['label' => 'default', 'icon' => '997'],
+];
+
+
+$this->registerJs("
+    $('[data-toggle=\"tooltip\"]').tooltip();
+", View::POS_READY);
+
 ?>
 <div class="shop-item-index">
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -22,9 +41,10 @@ use yii\helpers\ArrayHelper;
                 'attribute' => 'item.item_name',
                 'label' => 'Items',
                 'value' => function($model){
-                    return Html::img(Yii::$app->params['item_small_image_url'].
+                    $item = Html::img(Yii::$app->params['item_small_image_url'].
                         ItemHelper::getImgFileName($model->item)) .' '.
                         $model->item['nameSlot'];
+                    return $item;
                 },
                 'format' => 'html',
                 'filter' => Typeahead::widget([
@@ -42,7 +62,41 @@ use yii\helpers\ArrayHelper;
                         "typeahead:select" => "function() { $(this).change() }",
                     ],
 
-                ])
+                ]),
+                'headerOptions' => [
+                    'class' => 'col-md-4'
+                ],
+            ],
+            [
+                'attribute' => 'enhancement',
+                'label' => '+',
+                'value' => function($model){
+                    return $model->enhancement ? '+'.$model->enhancement : '';
+                },
+               'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
+            ],
+            [
+                'attribute' => 'option',
+                'label' => 'Option',
+                'value' => function($model) use ($elements, $very, $items, $label){
+                    $option = '';
+
+                    foreach(range(1, 4) as $slot){
+                        $option .= $model->{'card_'.$slot} ? '['. Html::img(Yii::$app->params['item_small_image_url']. 'card.gif') . $model->{'itemCard'.$slot}['item_name'] . ']<br>' : '';
+                    }
+
+                    $option .= $model->very ? ' '. $very[$model->very] : '';
+                    $option .= $model->element ? 
+                        Html::img(Yii::$app->params['item_small_image_url']. $label[$model->element]['icon']. '.gif').
+                        ' <span class="label label-'. $label[$model->element]['label'] .'">'. $elements[$model->element].'</span>' : '';
+                    return $option;
+                },
+                'headerOptions' => [
+                    'class' => 'col-md-2'
+                ],
+                'format' => 'raw',
             ],
             [
                 'attribute' => 'price',
@@ -50,23 +104,32 @@ use yii\helpers\ArrayHelper;
                 'value' => function($model){
                     return number_format($model->price);
                 },
+               'headerOptions' => [
+                    'class' => 'col-md-2'
+                ],
             ],
             [
-                'attribute' => 'amount',
-                'label' => 'Amount',
-                'value' => function($model){
-                    return number_format($model->amount);
-                },
+                'attribute' => 'shop.character',
+                'label' => 'Owner',
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
             ],
             [
                 'attribute' => 'shop.shop_name',
                 'label' => 'Shop',
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
             ],
             [
                 'attribute' => 'updated_at',
                 'label' => 'Latest',
                 'format' => ['date', 'php:d M Y H:i:s'],
                 'filter' => false,
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
             ],
         ],
     ]); ?>

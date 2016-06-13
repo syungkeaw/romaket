@@ -91,6 +91,26 @@ class ShopItem extends \yii\db\ActiveRecord
         ]);
     }
 
+    public function getItemCard1()
+    {
+        return $this->hasOne(Item::className(), ['source_id' => 'card_1']);
+    }
+
+    public function getItemCard2()
+    {
+        return $this->hasOne(Item::className(), ['source_id' => 'card_2']);
+    } 
+
+    public function getItemCard3()
+    {
+        return $this->hasOne(Item::className(), ['source_id' => 'card_3']);
+    }    
+
+    public function getItemCard4()
+    {
+        return $this->hasOne(Item::className(), ['source_id' => 'card_4']);
+    }
+
     public function getShop()
     {
         return $this->hasOne(Shop::className(), [

@@ -28,10 +28,10 @@ class Item extends \yii\db\ActiveRecord
 
     private static $_element = [
         '',
-        'wind',
-        'fire',
-        'water',
-        'earth',
+        'Wind',
+        'Fire',
+        'Water',
+        'Earth',
     ];
 
     private static $_very = [
