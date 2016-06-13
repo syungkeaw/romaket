@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use frontend\assets\Select23Asset;
 use common\models\Item;
+use yii\widgets\MaskedInput;
 
 Select23Asset::register($this);
 
@@ -27,10 +28,8 @@ $maps = [
 ];
 
 $items = '';
-
-// echo '<pre>', print_r(ArrayHelper::map($item_model, 'source_id', 'item_name')); die;
 foreach($item_model as $item){
-    $items .= '{id: "'.$item->source_id.'",text: "'.$item->nameSlot.'",type: "'.$item->item_type_id.'"},';
+    $items .= '{id: "'.$item->source_id.'",text: "'.$item->nameSlot.'",type: "'.$item->item_type_id.'",slot: "'.$item->item_slot.'"},';
 }
 
 $this->registerJs("
@@ -78,34 +77,93 @@ $this->registerJs("
     }
 
     var items = [".$items."];
-    $('.select2ex').select2({
+    var query = function (q) {
+        var pageSize,
+            results;
+            pageSize = 20;
+            results  = _.filter(this.data, function (e) {
+                var searchText = q.term;
+                if(searchText !== undefined){
+                    searchText = searchText.toLowerCase();
+                }
+                return (searchText === '' || e.text.toLowerCase().indexOf(searchText) >= 0);
+            });
+        q.callback({
+            results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
+            more   : results.length >= q.page * pageSize
+        });
+    }
+
+    $('.select2item').select2({
         data: items,
         formatLoadMore   : 'Loading more...',
         formatResult: repoFormatResult,
         formatSelection: repoFormatSelection,
         escapeMarkup: function (m) { return m; },
         dropdownCssClass: 'bigdrop',
-        query            : function (q) {
-            var pageSize,
-                results;
-                pageSize = 20;
-                results  = _.filter(this.data, function (e) {
-                    var searchText = q.term;
-                    if(searchText !== undefined){
-                        searchText = searchText.toLowerCase();
-                    }
-                    return (searchText === '' || e.text.toLowerCase().indexOf(searchText) >= 0);
-                });
-            q.callback({
-                results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
-                more   : results.length >= q.page * pageSize
-            });
+        query            : query,
+    });
+
+    $('.select2card').select2({
+        data: _.filter(items, function (e) { return e.type == 6; }),
+        formatLoadMore   : 'Loading more...',
+        formatResult: repoFormatResult,
+        formatSelection: repoFormatSelection,
+        escapeMarkup: function (m) { return m; },
+        dropdownCssClass: 'bigdrop',
+        query            : query,
+    });
+
+    $('.select2item').change(function(){
+
+        var item = $(this).closest('.item');
+
+        $('.weapon, .armor', item).hide();
+        $('[name=\"isElement\"]', item).attr('checked', false);
+        resetItemElement(item);
+        $('.select2card', item).each(function(){ 
+            $(this).select2('val', ''); 
+            $(this).val('');
+            $(this).parent().find('.select2-chosen').html('');
+        });
+        $('select[id$=\"-enhancement\"]>option:eq(0)', item).prop('selected', true);
+
+        if($(this).select2('data').type == 5){
+            $('.weapon.enhancement', item).show();
+
+            if($(this).select2('data').slot == 0){
+                $('.weapon.is-element', item).show();
+            }else{
+                $('.card-slot', item).show();
+                for(i = 0; i < $(this).select2('data').slot; i++){
+                    $('.card-slot>.slot:eq('+ i +')', item).show();
+                }
+            }
+        }else if($(this).select2('data').type == 4){
+            $('.armor.enhancement', item).show();
+
+            if($(this).select2('data').slot > 0){
+                $('.card-slot', item).show();
+                $('.card-slot>.slot.armor', item).show();
+            }
         }
     });
 
-    // $('.select2ex').change(function(){
-    //     alert($(this).select2('data').type);
-    // });
+    $('[name=\"isElement\"]').click(function(){
+        var item = $(this).closest('.item');
+        
+        if($(this).is(':checked') == true){
+            $('.element', item).show();
+        } else{
+            $('.element', item).hide();
+            resetItemElement(item);
+        } 
+    });
+
+    function resetItemElement(item){
+        $('select[id$=\"-very\"]>option:eq(0)', item).prop('selected', true);
+        $('select[id$=\"-element\"]>option:eq(0)', item).prop('selected', true);
+    }
 
     $( 'ul.select2-results' ).bind( 'mousewheel DOMMouseScroll', function ( e ) {
         var e0 = e.originalEvent,
@@ -115,25 +173,25 @@ $this->registerJs("
         e.preventDefault();
     });
     
-    $('input.select2ex').filter(function() { return $(this).val(); }).each(function(){
+    $('input.select2item, input.select2card').filter(function() { return $(this).val(); }).each(function(){
         var default_value = $(this).val();
         var item = _.filter(items, function (e) { return e.id == default_value; });
         $(this).parent().find('.select2-chosen').html(getSelectTemplate(item[0]));
     });
   
-   function repoFormatResult(item) {
+    function repoFormatResult(item) {
         return getSelectTemplate(item);
-   }
+    }
 
-   function repoFormatSelection(item) {
+    function repoFormatSelection(item) {
         return getSelectTemplate(item);
-   }
+    }
 
-   function getSelectTemplate(item) {
+    function getSelectTemplate(item) {
         var card = 'card';
         var item_img = item.text.toLowerCase().indexOf(card) > -1 ? card : item.id;
         return '<div class=\"span2\"><img src=\"".Yii::$app->params['item_small_image_url']."' + item_img + '.gif\" /> '+ item.text +'</div>';
-   }
+    }
 
 ", View::POS_READY);
 
@@ -146,7 +204,7 @@ $this->registerCss("
     height: 100%;
     width: 100%;
 }
-
+.weapon, .armor, .card-slot, .slot{ display: none; }
 .bigdrop.select2-container .select2-results {max-height: 300px;}
 ");
 ?>
@@ -162,7 +220,7 @@ $this->registerCss("
         </div>
         <div class="col-md-6 text-center">
             <div class="map-picker">
-            <?= Html::img(Yii::$app->params['map_path'].'map-1.jpg') ?>
+            <?= Html::img(Yii::$app->params['map_path'].'map-1z.jpg') ?>
             </div>
         </div>
     </div>
@@ -183,43 +241,43 @@ $this->registerCss("
             ?>
                 <tr>
                     <td class="col-sm-1"><?= $slot+1 ?></td>
-                    <td class="col-sm-7">
+                    <td class="col-sm-7 item">
                         <div class="row">
                             <div class="col-sm-8">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]item_id")
-                                    ->hiddenInput(['class'=> 'select2ex', 'style' => 'width: 100%;'])
+                                    ->hiddenInput(['class'=> 'select2item', 'style' => 'width: 100%;'])
                                     ->label(false) 
                                 ?>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2 weapon armor enhancement">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]enhancement")
-                                    ->dropDownList(range(0,10))
+                                    ->dropDownList(Item::getEnhancements())
                                     ->label(false)
                                 ?>
                             </div>
-                            <div class="col-sm-2 weapon">
-                                <?= Html::checkbox('isElement') ?>
+                            <div class="col-sm-2 weapon is-element">
+                                <?= Html::checkbox('isElement', [], ['label' => 'ธาตุ']) ?>
                             </div>
                         </div>
-                        <div class="row weapon armor">
-                            <div class="col-md-3 card-slot">
+                        <div class="row weapon armor card-slot">
+                            <div class="col-md-3 weapon armor slot">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]card_1")
-                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
                                     ->label(false) ?>
                             </div>
-                            <div class="col-md-3 card-slot">
+                            <div class="col-md-3 weapon slot">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]card_2")
-                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
                                     ->label(false) ?>
                             </div>
-                            <div class="col-md-3 card-slot">
+                            <div class="col-md-3 weapon slot">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]card_3")
-                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
                                     ->label(false) ?>
                             </div>
-                            <div class="col-md-3 card-slot">
+                            <div class="col-md-3 weapon slot">
                                 <?= $form->field($shop_item_model[$slot], "[$slot]card_4")
-                                    ->textInput(['class' => 'select2ex', 'style' => 'width: 100%'])
+                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
                                     ->label(false) ?>
                             </div>
                         </div>
@@ -240,7 +298,38 @@ $this->registerCss("
                     <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
                     <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
                 </tr>
-            <?php } ?>
+
+            <?php 
+                $js = "";
+                if($shop_item_model[$slot]->card_1){
+                    $js .= "$('.card-slot:eq(".$slot.")').show();";
+                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(0)').show();";
+                }              
+                if($shop_item_model[$slot]->card_2){
+                    $js .= "$('.card-slot:eq(".$slot.")').show();";
+                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(1)').show();";
+                }              
+                if($shop_item_model[$slot]->card_3){
+                    $js .= "$('.card-slot:eq(".$slot.")').show();";
+                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(2)').show();";
+                }              
+                if($shop_item_model[$slot]->card_4){
+                    $js .= "$('.card-slot:eq(".$slot.")').show();";
+                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(3)').show();";
+                }
+                if($shop_item_model[$slot]->enhancement != ''){
+                    $js .= "$('.enhancement:eq(".$slot.")').show();";
+                }
+                if($shop_item_model[$slot]->element){
+                    $js .= "$('.element:eq(".$slot.")').show();";
+                }
+                if($shop_item_model[$slot]->item['item_slot'] == 0 && $shop_item_model[$slot]->item['item_type_id'] == 5){
+                    $js .= "$('.is-element:eq(".$slot.")').show();";
+                    if($shop_item_model[$slot]->element)
+                        $js .= "$('[name=\"isElement\"]:eq(".$slot.")').prop('checked', true);";
+                }
+                $this->registerJs($js, View::POS_READY);
+            } ?>
         <tbody>
     </table>
     <div class="form-group">

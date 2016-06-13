@@ -153,7 +153,16 @@ class ShopController extends Controller
                     foreach ($shop_item_model as $key => $model) {
                         if(is_null($shop_item_model_old)|| ($shop_item_model_old[$key]->item_id != $model->item_id
                                                         || $shop_item_model_old[$key]->amount != $model->amount
-                                                        || $shop_item_model_old[$key]->price != $model->price))
+                                                        || $shop_item_model_old[$key]->price != $model->price
+                                                        || $shop_item_model_old[$key]->card_1 != $model->card_1
+                                                        || $shop_item_model_old[$key]->card_2 != $model->card_2
+                                                        || $shop_item_model_old[$key]->card_3 != $model->card_3
+                                                        || $shop_item_model_old[$key]->card_4 != $model->card_4
+                                                        || $shop_item_model_old[$key]->enhancement != $model->enhancement
+                                                        || $shop_item_model_old[$key]->very != $model->very
+                                                        || $shop_item_model_old[$key]->element != $model->element
+                                                        )
+                        )
                         {
                             if($model->item_id) {
                                 $model->shop_id = $shop_model->id;

@@ -40,6 +40,20 @@ class Item extends \yii\db\ActiveRecord
         2 => 'very very strong',
     ];
 
+    private static $_ehancement = [
+        '+0',
+        '+1',
+        '+2',
+        '+3',
+        '+4',
+        '+5',
+        '+6',
+        '+7',
+        '+8',
+        '+9',
+        '+10',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -83,6 +97,11 @@ class Item extends \yii\db\ActiveRecord
             'item_weapon_lvl' => 'Item Weapon Lvl',
             'item_description' => 'Item Description',
         ];
+    }
+
+    public static function getEnhancements()
+    {
+        return self::$_ehancement;
     }
 
     public static function getElements()

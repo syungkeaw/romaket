@@ -7,6 +7,5 @@ return [
         ],
     ],
     'defaultRoute' => 'market/',
-    'homeUrl' => ['/'],
     'timeZone' => 'Asia/Bangkok',
 ];
