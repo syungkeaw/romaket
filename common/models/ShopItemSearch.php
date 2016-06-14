@@ -87,7 +87,6 @@ class ShopItemSearch extends ShopItem
             'shop_id' => $this->shop_id,
             'price' => $this->price,
             'amount' => $this->amount,
-            'enhancement' => $this->enhancement,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
@@ -99,6 +98,16 @@ class ShopItemSearch extends ShopItem
         // if(preg_match('/\\[\\d\\]/', $this->getAttribute('item.item_name'), $matches)){
         //     $query->andFilterWhere(['item.item_slot' => str_replace(['[', ']'], '', $matches[0])]);
         // }
+        if($this->getAttribute('enhancement') != 'null'){
+            $query->andFilterWhere(['enhancement' => $this->enhancement]);
+        }
+
+        $query->andFilterWhere(
+            ['or', 
+                ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
+                ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
+            ]
+        );
 
         return $dataProvider;
     }

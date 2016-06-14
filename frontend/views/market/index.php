@@ -8,6 +8,7 @@ use kartik\typeahead\Typeahead;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 use common\models\Item;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
@@ -52,7 +53,8 @@ $this->registerJs("
                     'value' => $searchModel['item.item_name'],
                     'dataset' => [
                         [
-                            'local' => ArrayHelper::getColumn($items, 'item_name'),
+                            // 'local' => ArrayHelper::getColumn($items, 'item_name'),
+                            'local' => [['1231' => 'data1'], ['1233' => 'data2']],
                             'limit' => 10,
                         ],
                     ],
@@ -76,6 +78,12 @@ $this->registerJs("
                'headerOptions' => [
                     'class' => 'col-md-1'
                 ],
+                'filter' => Html::dropDownList(
+                    'ShopItemSearch[enhancement]',
+                    $searchModel['enhancement'],
+                    ['' => ''] + Item::getEnhancements(),
+                    ['class' => 'form-control']
+                ),
             ],
             [
                 'attribute' => 'option',
@@ -97,6 +105,15 @@ $this->registerJs("
                     'class' => 'col-md-2'
                 ],
                 'format' => 'raw',
+                'filter' => Select2::widget([
+                    'name' => 'ShopItemSearch[option]',
+                    'value' => $searchModel['option'],
+                    'data' => ArrayHelper::map($items, 'source_id', 'nameSlot'),
+                    'options' => ['placeholder' => 'Select a card or an element ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
             ],
             [
                 'attribute' => 'price',
