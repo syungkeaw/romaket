@@ -10,6 +10,7 @@ use common\models\Shop;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * ShopItemController implements the CRUD actions for ShopItem model.
@@ -41,10 +42,20 @@ class MarketController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $items = Item::find()->all();
 
+        $shopItem = ShopItem::find()->asArray()->all();
+        $option = [];
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_1'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_2'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_3'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_4'));
+        $option = array_filter($option);
+        $option_item = Item::findAll(['source_id' => ['994', '995', '996', '997'] + $option]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'items' => $items,
+            'option_item' => $option_item,
         ]);
     }
 

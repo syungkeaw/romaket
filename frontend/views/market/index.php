@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use common\models\Item;
 use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
@@ -19,15 +20,15 @@ $elements = Item::getElements();
 $very = Item::getVeries();
 $label = [
     '',
-    ['label' => 'success', 'icon' => '996'],
     ['label' => 'danger', 'icon' => '994'],
     ['label' => 'info', 'icon' => '995'],
+    ['label' => 'success', 'icon' => '996'],
     ['label' => 'default', 'icon' => '997'],
 ];
 
 
 $this->registerJs("
-    $('[data-toggle=\"tooltip\"]').tooltip();
+
 ", View::POS_READY);
 
 ?>
@@ -53,8 +54,7 @@ $this->registerJs("
                     'value' => $searchModel['item.item_name'],
                     'dataset' => [
                         [
-                            // 'local' => ArrayHelper::getColumn($items, 'item_name'),
-                            'local' => [['1231' => 'data1'], ['1233' => 'data2']],
+                            'local' => ArrayHelper::getColumn($items, 'item_name'),
                             'limit' => 10,
                         ],
                     ],
@@ -108,10 +108,14 @@ $this->registerJs("
                 'filter' => Select2::widget([
                     'name' => 'ShopItemSearch[option]',
                     'value' => $searchModel['option'],
-                    'data' => ArrayHelper::map($items, 'source_id', 'nameSlot'),
+                    'data' => ArrayHelper::map($option_item, 'source_id', 'nameSlot'),
                     'options' => ['placeholder' => 'Select a card or an element ...'],
                     'pluginOptions' => [
                         'allowClear' => true,
+                        'templateResult' => new JsExpression('function format(item) {
+                            return \'<img src="'. Yii::$app->params['item_small_image_url'] .'\' + (item.text.toLowerCase().indexOf(\'card\') > -1 ? \'card\' : item.id) + \'.gif"/> \' + item.text;
+                        }'),
+                        'escapeMarkup' => new JsExpression('function(m) { return m; }'),
                     ],
                 ]),
             ],
@@ -128,6 +132,14 @@ $this->registerJs("
             [
                 'attribute' => 'shop.character',
                 'label' => 'Owner',
+                'value' => function($model){
+                    return '<div style="
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 100px;" title="'. $model->shop->character .'">'. $model->shop->character. '</div>';
+                },
+                'format' => 'raw',
                 'headerOptions' => [
                     'class' => 'col-md-1'
                 ],
@@ -135,8 +147,16 @@ $this->registerJs("
             [
                 'attribute' => 'shop.shop_name',
                 'label' => 'Shop',
+                'value' => function($model){
+                    return '<div style="
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 100px;" title="'. $model->shop->shop_name .'">'. $model->shop->shop_name. '</div>';
+                },
+                'format' => 'raw',
                 'headerOptions' => [
-                    'class' => 'col-md-1'
+                    'class' => 'col-md-1',
                 ],
             ],
             [

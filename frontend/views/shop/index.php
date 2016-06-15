@@ -7,6 +7,19 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\ShopSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$maps = [
+    [
+        'id' => '1',
+        'name' => 'Morroc',
+        'map' => 'morroc.jpg',
+    ],
+    [
+        'id' => '2',
+        'name' => 'Prontera',
+        'map' => 'prontera.jpg',
+    ], 
+];
+
 $this->title = 'Shops';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,25 +27,46 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <div class="row">
+    <?php foreach ($dataProvider->getModels() as $model) { ?>
 
-            'id',
-            'shop_name',
-            'map',
-            'location',
-            'character',
-            // 'not_found_count',
-            // 'status',
-            // 'created_by',
-            // 'created_at',
-            // 'updated_by',
-            // 'updated_at',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+        <div class="col-sm-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" 
+                        style="
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 250px;">
+                        <?= $model->shop_name ?> <small><?= $maps[$model->map]['name'] ?> (<?= $model->location ?>)</small></h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead><tr><th>Items</th><th>Price</th></tr></thead>
+                        <tbody>
+                        <?php foreach (range(0, 11) as $slot) { 
+                                $item_img = Yii::getAlias('@web'). '/images/item_slot.jpg';
+                                $item_name = '';
+                                $item_price = 0;
+                                if(isset($model->shopItems[$slot])){
+                                    $item_img = Yii::$app->params['item_small_image_url'] . $model->shopItems[$slot]->item->source_id .'.gif';
+                                    $item_name = $model->shopItems[$slot]->item->item_name;
+                                    $item_price = number_format($model->shopItems[$slot]->price);
+                                }
+                        ?>
+                            <tr style="height:41px">
+                                <td><?= Html::img($item_img) .' '. $item_name ?></td>
+                                <td class="text-right"><?= $item_price ?> <small>zeny</small></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                    <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-xs']) ?>
+                    <?= Html::a('<span class="glyphicon glyphicon-ban-circle"></span> Close', ['delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs']) ?>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+    </div>
+</div>

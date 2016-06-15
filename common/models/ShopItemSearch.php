@@ -64,7 +64,6 @@ class ShopItemSearch extends ShopItem
                    'amount', 
                    'updated_at', 
                    'enhancement', 
-                   'option',
                 ],
                 'defaultOrder' => ['updated_at' => SORT_DESC],
             ],
@@ -102,12 +101,17 @@ class ShopItemSearch extends ShopItem
             $query->andFilterWhere(['enhancement' => $this->enhancement]);
         }
 
-        $query->andFilterWhere(
-            ['or', 
-                ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
-                ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
-            ]
-        );
+        if(in_array($this->getAttribute('option'), ['994', '995', '996', '997'])){
+            $query->andFilterWhere(['element' => ($this->getAttribute('option') - 993)]);
+        }else{
+            $query->andFilterWhere(
+                ['or', 
+                    ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
+                    ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
+                ]
+            );
+        }
+
 
         return $dataProvider;
     }

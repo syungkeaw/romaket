@@ -28,9 +28,9 @@ class Item extends \yii\db\ActiveRecord
 
     private static $_element = [
         '',
-        'Wind',
         'Fire',
         'Water',
+        'Wind',
         'Earth',
     ];
 
