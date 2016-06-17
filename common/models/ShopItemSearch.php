@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\ShopItem;
+use common\classes\RoHelper;
 
 /**
  * ShopItemSearch represents the model behind the search form about `common\models\ShopItem`.
@@ -69,8 +70,6 @@ class ShopItemSearch extends ShopItem
             ],
         ]);
 
-        
-
         $this->load($params);
 
         if (!$this->validate()) {
@@ -78,6 +77,10 @@ class ShopItemSearch extends ShopItem
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        $query->andFilterWhere([
+            'server' => RoHelper::getActiveServerId(),
+        ]);
 
         // grid filtering conditions
         $query->andFilterWhere([

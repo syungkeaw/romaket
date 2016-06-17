@@ -16,6 +16,7 @@ use yii\behaviors\BlameableBehavior;
  * @property string $character
  * @property integer $not_found_count
  * @property integer $status
+ * @property integer $server
  * @property integer $created_by
  * @property integer $created_at
  * @property integer $updated_by
@@ -57,7 +58,7 @@ class Shop extends \yii\db\ActiveRecord
     {
         return [
             [['shop_name', 'map'], 'required'],
-            [['map','not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at'], 'integer'],
+            [['map','not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at', 'server'], 'integer'],
             [['shop_name', 'location', 'character'], 'string', 'max' => 255],
             ['not_found_count', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -78,6 +79,7 @@ class Shop extends \yii\db\ActiveRecord
             'character' => 'Character',
             'not_found_count' => 'Not Found Count',
             'status' => 'Status',
+            'server' => 'Server',
             'created_by' => 'Created By',
             'created_at' => 'Created At',
             'updated_by' => 'Updated By',
@@ -98,4 +100,20 @@ class Shop extends \yii\db\ActiveRecord
             'source_id' => 'item_id'
         ])->via('shopItems');
     }
+
+public function beforeSave($insert)
+{
+    if (parent::beforeSave($insert)) {
+
+        if (!Yii::$app->session->isActive){
+            Yii::$app->session->open();
+        }
+
+        $this->server = Yii::$app->session->get('server');
+
+        return true;
+    } else {
+        return false;
+    }
+}
 }

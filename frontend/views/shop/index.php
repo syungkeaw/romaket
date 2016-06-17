@@ -3,17 +3,19 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\classes\RoHelper;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $maps = [
-    [
+    1 => [
         'id' => '1',
         'name' => 'Morroc',
         'map' => 'morroc.jpg',
     ],
-    [
+    2 => [
         'id' => '2',
         'name' => 'Prontera',
         'map' => 'prontera.jpg',
@@ -24,6 +26,7 @@ $this->title = 'Shops';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-index">
+    <h1>Server: <?= RoHelper::getActiveServerName() ?></h1>
     <p>
         <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -50,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $item_name = '';
                                 $item_price = 0;
                                 if(isset($model->shopItems[$slot])){
-                                    $item_img = Yii::$app->params['item_small_image_url'] . $model->shopItems[$slot]->item->source_id .'.gif';
+                                    $item_img = Yii::getAlias('@web'). '/images/items/small/' . $model->shopItems[$slot]->item->source_id .'.gif';
                                     $item_name = $model->shopItems[$slot]->item->item_name;
                                     $item_price = number_format($model->shopItems[$slot]->price);
                                 }

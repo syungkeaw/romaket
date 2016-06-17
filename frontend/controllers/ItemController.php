@@ -32,7 +32,7 @@ class ItemController extends Controller
         ];
     }
 
-    public function actionTest()
+    public function actionNewitem()
     {
         ini_set('max_execution_time', 300);
         $url = 'http://ratemyserver.net/index.php?page=item_db&item_type=5&page_num=1'; 
@@ -120,6 +120,58 @@ class ItemController extends Controller
         echo '<pre>';
         print_r($items);
         die;
+    }
+
+    public function actionItemimg()
+    {
+        ini_set('max_execution_time', 10000);
+
+        $existed = [];
+        foreach(glob('../web/images/items/small/*.*') as $filename){
+            $filename = str_replace('../web/images/items/small/', '', $filename);
+            $filename = str_replace('.gif', '', $filename);
+            $existed[] = $filename;
+         }
+
+        //  echo '<pre>', print_r($existed);
+
+        // die; 
+        $items = Item::find()->where(['not in', 'source_id', $existed])->all();
+
+        // echo '<pre>', print_r($items); die;
+
+        foreach ($items as $key => $item) {
+            $imgp = Yii::getAlias('@web'). '/images/items/small/'. $item->source_id . '.gif';
+            $imgl = Yii::getAlias('@web'). '/images/items/large/'. $item->source_id . '.gif';
+
+            $url = Yii::$app->params['item_small_image_url2']. $item->source_id . '.gif';
+            $img = Yii::getAlias('@frontend'). '/web/images/items/small/'. $item->source_id . '.gif';
+
+            $ch = curl_init($url);
+            $fp = fopen($img, 'wb');
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_exec($ch);
+            curl_close($ch);
+            fclose($fp);
+
+
+            // $url = Yii::$app->params['item_large_image_url']. $item->source_id . '.gif';
+            // $img = Yii::getAlias('@frontend'). '/web/images/items/large/'. $item->source_id . '.gif';
+
+            // $ch = curl_init($url);
+            // $fp = fopen($img, 'wb');
+            // curl_setopt($ch, CURLOPT_FILE, $fp);
+            // curl_setopt($ch, CURLOPT_HEADER, 0);
+            // curl_exec($ch);
+            // curl_close($ch);
+            // fclose($fp);
+
+            echo ($key+1). ' :: <img src="'. $imgp .'">  |  ';
+            echo '<img src="'. $imgl .'"> <br>';
+
+        }
+
     }
 
     /**

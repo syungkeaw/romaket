@@ -51,6 +51,10 @@ class MarketController extends Controller
         $option = array_filter($option);
         $option_item = Item::findAll(['source_id' => ['994', '995', '996', '997'] + $option]);
 
+
+        // echo '<pre>', print_r(Yii::$app->session);
+        // die;
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

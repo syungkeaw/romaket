@@ -12,10 +12,10 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
-        'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-        ],
+        // 'user' => [
+        //     'identityClass' => 'common\models\User',
+        //     'enableAutoLogin' => true,
+        // ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -33,6 +33,36 @@ return [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+        'authClientCollection' => [
+            'class' => yii\authclient\Collection::className(),
+            'clients' => [
+                'facebook' => [
+                    'class'        => 'dektrium\user\clients\Facebook',
+                    'clientId'     => '474331226040204',
+                    'clientSecret' => '23998583a8903bd071ba0acc3ee1db33',
+                ],
+                'twitter' => [
+                    'class'          => 'dektrium\user\clients\Twitter',
+                    'consumerKey'    => 'CONSUMER_KEY',
+                    'consumerSecret' => 'CONSUMER_SECRET',
+                ],
+                'google' => [
+                    'class'        => 'dektrium\user\clients\Google',
+                    'clientId'     => 'CLIENT_ID',
+                    'clientSecret' => 'CLIENT_SECRET',
+                ],
+            ],
+        ],
+    ],
+    'modules' => [
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            // 'enableUnconfirmedLogin' => true,
+            'enableFlashMessages' => false,
+            // 'confirmWithin' => 21600,
+            'cost' => 12,
+            'admins' => ['admin'],
         ],
     ],
     'params' => $params,

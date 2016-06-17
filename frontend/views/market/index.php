@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use common\classes\ItemHelper;
+use common\classes\RoHelper;
 use kartik\typeahead\Typeahead;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
@@ -33,7 +34,9 @@ $this->registerJs("
 
 ?>
 <div class="shop-item-index">
-    <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
+
+<h1>Server: <?= RoHelper::getActiveServerName() ?></h1>
+
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -43,7 +46,7 @@ $this->registerJs("
                 'attribute' => 'item.item_name',
                 'label' => 'Items',
                 'value' => function($model){
-                    $item = Html::img(Yii::$app->params['item_small_image_url'].
+                    $item = Html::img(Yii::getAlias('@web'). '/images/items/small/'.
                         ItemHelper::getImgFileName($model->item)) .' '.
                         $model->item['nameSlot'];
                     return $item;
@@ -92,12 +95,12 @@ $this->registerJs("
                     $option = '';
 
                     foreach(range(1, 4) as $slot){
-                        $option .= $model->{'card_'.$slot} ? '['. Html::img(Yii::$app->params['item_small_image_url']. 'card.gif') . $model->{'itemCard'.$slot}['item_name'] . ']<br>' : '';
+                        $option .= $model->{'card_'.$slot} ? '['. Html::img(Yii::getAlias('@web'). '/images/items/small/'. 'card.gif') . $model->{'itemCard'.$slot}['item_name'] . ']<br>' : '';
                     }
 
                     $option .= $model->very ? ' '. $very[$model->very] : '';
                     $option .= $model->element ? 
-                        Html::img(Yii::$app->params['item_small_image_url']. $label[$model->element]['icon']. '.gif').
+                        Html::img(Yii::getAlias('@web'). '/images/items/small/'. $label[$model->element]['icon']. '.gif').
                         ' <span class="label label-'. $label[$model->element]['label'] .'">'. $elements[$model->element].'</span>' : '';
                     return $option;
                 },
@@ -113,7 +116,7 @@ $this->registerJs("
                     'pluginOptions' => [
                         'allowClear' => true,
                         'templateResult' => new JsExpression('function format(item) {
-                            return \'<img src="'. Yii::$app->params['item_small_image_url'] .'\' + (item.text.toLowerCase().indexOf(\'card\') > -1 ? \'card\' : item.id) + \'.gif"/> \' + item.text;
+                            return \'<img src="'. Yii::getAlias('@web'). '/images/items/small/' .'\' + (item.text.toLowerCase().indexOf(\'card\') > -1 ? \'card\' : item.id) + \'.gif"/> \' + item.text;
                         }'),
                         'escapeMarkup' => new JsExpression('function(m) { return m; }'),
                     ],

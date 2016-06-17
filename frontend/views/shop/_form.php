@@ -190,7 +190,7 @@ $this->registerJs("
     function getSelectTemplate(item) {
         var card = 'card';
         var item_img = item.text.toLowerCase().indexOf(card) > -1 ? card : item.id;
-        return '<div class=\"span2\"><img src=\"".Yii::$app->params['item_small_image_url']."' + item_img + '.gif\" /> '+ item.text +'</div>';
+        return '<div class=\"span2\"><img src=\"".Yii::getAlias('@web'). '/images/items/small/'."' + item_img + '.gif\" /> '+ item.text +'</div>';
     }
 
 ", View::POS_READY);

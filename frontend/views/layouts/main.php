@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+use common\classes\RoHelper;
 
 AppAsset::register($this);
 ?>
@@ -36,13 +37,20 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => Yii::$app->homeUrl],
-        ['label' => 'My Shop', 'url' => ['/shop']],
+        ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
+        ['label' => 'My Shop', 'url' => ['/shop'], 'visible' => !Yii::$app->user->isGuest],
+        [
+            'label' => RoHelper::getActiveServerName(), 'items' => [
+                ['label' => 'Thor', 'url' => ['/switch', 'server' => '1']],
+                ['label' => 'Loki', 'url' => ['/switch', 'server' => '2']],
+            ]
+        ],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Sign in', 'url' => ['/user/security/login']];
     } else {
         $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/user/security/logout'], 'post')
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link']
