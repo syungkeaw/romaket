@@ -11,6 +11,7 @@ use yii\web\View;
 use common\models\Item;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
+use kartik\dropdown\DropdownX;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
@@ -35,7 +36,7 @@ $this->registerJs("
 ?>
 <div class="shop-item-index">
 
-<h1>Server: <?= RoHelper::getActiveServerName() ?></h1>
+<h2>Server: <?= RoHelper::getActiveServerName() ?></h2>
 
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -74,7 +75,7 @@ $this->registerJs("
             ],
             [
                 'attribute' => 'enhancement',
-                'label' => '+',
+                'label' => 'Enhanced',
                 'value' => function($model){
                     return $model->enhancement ? '+'.$model->enhancement : '';
                 },
@@ -136,11 +137,7 @@ $this->registerJs("
                 'attribute' => 'shop.character',
                 'label' => 'Owner',
                 'value' => function($model){
-                    return '<div style="
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            max-width: 100px;" title="'. $model->shop->character .'">'. $model->shop->character. '</div>';
+                    return '<div class="ellipsis" title="'. $model->shop->character .'">'. $model->shop->character. '</div>';
                 },
                 'format' => 'raw',
                 'headerOptions' => [
@@ -151,11 +148,7 @@ $this->registerJs("
                 'attribute' => 'shop.shop_name',
                 'label' => 'Shop',
                 'value' => function($model){
-                    return '<div style="
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            max-width: 100px;" title="'. $model->shop->shop_name .'">'. $model->shop->shop_name. '</div>';
+                    return '<div class="ellipsis" title="'. $model->shop->shop_name .'">'. $model->shop->shop_name. '</div>';
                 },
                 'format' => 'raw',
                 'headerOptions' => [
@@ -167,6 +160,26 @@ $this->registerJs("
                 'label' => 'Latest',
                 'format' => ['date', 'php:d M Y H:i:s'],
                 'filter' => false,
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
+            ],
+            [
+                'value' => function($model){
+                    $menu = Html::beginTag('div', ['class'=>'dropdown']);
+                    $menu .= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']);
+                    $menu .= DropdownX::widget([
+                        'items' => [
+                            ['label' => 'Report', 'url' => '#'],
+                            ['label' => 'Like', 'url' => '#'],
+                            '<li class="divider"></li>',
+                            ['label' => 'More', 'url' => '#'],
+                        ],
+                    ]); 
+                    $menu .= Html::endTag('div');
+                    return $menu;
+                },
+                'format' => 'raw',
                 'headerOptions' => [
                     'class' => 'col-md-1'
                 ],

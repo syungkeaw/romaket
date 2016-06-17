@@ -172,7 +172,7 @@ class ShopController extends Controller
 
                     }
                 }
-                return $this->redirect(['view', 'id' => $shop_model->id]);
+                return $this->redirect(['index']);
             }
         } 
     }

@@ -210,128 +210,143 @@ $this->registerCss("
 ?>
 
 <div class="shop-form">
-    <?php $form = ActiveForm::begin(); ?>
-    <div class="row">
-        <div class="col-md-6">
-            <?= $form->field($shop_model, 'shop_name')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($shop_model, 'character')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($shop_model, 'map')->dropDownList(ArrayHelper::map($maps, 'id', 'name')) ?>
-            <?= $form->field($shop_model, 'location')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Shop Information</h3>
         </div>
-        <div class="col-md-6 text-center">
-            <div class="map-picker">
-            <?= Html::img(Yii::$app->params['map_path'].'map-1z.jpg') ?>
+        <div class="panel-body">
+            <?php $form = ActiveForm::begin(); ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($shop_model, 'shop_name')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($shop_model, 'character')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($shop_model, 'map')->dropDownList(ArrayHelper::map($maps, 'id', 'name')) ?>
+                    <?= $form->field($shop_model, 'location')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="map-picker">
+                    <?= Html::img(Yii::$app->params['map_path'].'map-1.jpg') ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Your Goods</h3>
+        </div>
+    <div class="panel-body">
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Item Name</th>
-                <th>Amount</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $shop_item_model = is_array($shop_item_model) ? $shop_item_model : [$shop_item_model];
-            for($slot = 0; $slot <= 11; $slot++){
-            ?>
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td class="col-sm-1"><?= $slot+1 ?></td>
-                    <td class="col-sm-7 item">
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]item_id")
-                                    ->hiddenInput(['class'=> 'select2item', 'style' => 'width: 100%;'])
-                                    ->label(false) 
-                                ?>
-                            </div>
-                            <div class="col-sm-2 weapon armor enhancement">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]enhancement")
-                                    ->dropDownList(Item::getEnhancements())
-                                    ->label(false)
-                                ?>
-                            </div>
-                            <div class="col-sm-2 weapon is-element">
-                                <?= Html::checkbox('isElement', [], ['label' => 'ธาตุ']) ?>
-                            </div>
-                        </div>
-                        <div class="row weapon armor card-slot">
-                            <div class="col-md-3 weapon armor slot">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]card_1")
-                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
-                                    ->label(false) ?>
-                            </div>
-                            <div class="col-md-3 weapon slot">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]card_2")
-                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
-                                    ->label(false) ?>
-                            </div>
-                            <div class="col-md-3 weapon slot">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]card_3")
-                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
-                                    ->label(false) ?>
-                            </div>
-                            <div class="col-md-3 weapon slot">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]card_4")
-                                    ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
-                                    ->label(false) ?>
-                            </div>
-                        </div>
-
-                        <div class="row weapon element">
-                            <div class="col-md-3">
-                                <?= $form->field($shop_item_model[$slot], "[$slot]very")
-                                    ->dropDownList(Item::getVeries())
-                                    ->label(false) ?>
-                            </div>
-                            <div class="col-md-3">    
-                                <?= $form->field($shop_item_model[$slot], "[$slot]element")
-                                    ->dropDownList(Item::getElements())
-                                    ->label(false) ?>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
-                    <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
+                    <th>#</th>
+                    <th>Item Name</th>
+                    <th>Amount</th>
+                    <th>Price</th>
                 </tr>
+            </thead>
+            <tbody>
+                <?php
+                $shop_item_model = is_array($shop_item_model) ? $shop_item_model : [$shop_item_model];
+                for($slot = 0; $slot <= 11; $slot++){
+                ?>
+                    <tr>
+                        <td class="col-sm-1"><?= $slot+1 ?></td>
+                        <td class="col-sm-7 item">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]item_id")
+                                        ->hiddenInput(['class'=> 'select2item', 'style' => 'width: 100%;'])
+                                        ->label(false) 
+                                    ?>
+                                </div>
+                                <div class="col-sm-2 weapon armor enhancement">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]enhancement")
+                                        ->dropDownList(Item::getEnhancements())
+                                        ->label(false)
+                                    ?>
+                                </div>
+                                <div class="col-sm-2 weapon is-element">
+                                    <?= Html::checkbox('isElement', [], ['label' => 'ธาตุ']) ?>
+                                </div>
+                            </div>
+                            <div class="row weapon armor card-slot">
+                                <div class="col-md-3 weapon armor slot">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]card_1")
+                                        ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
+                                        ->label(false) ?>
+                                </div>
+                                <div class="col-md-3 weapon slot">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]card_2")
+                                        ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
+                                        ->label(false) ?>
+                                </div>
+                                <div class="col-md-3 weapon slot">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]card_3")
+                                        ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
+                                        ->label(false) ?>
+                                </div>
+                                <div class="col-md-3 weapon slot">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]card_4")
+                                        ->textInput(['class' => 'select2card', 'style' => 'width: 100%'])
+                                        ->label(false) ?>
+                                </div>
+                            </div>
 
-            <?php 
-                $js = "";
-                if($shop_item_model[$slot]->card_1){
-                    $js .= "$('.card-slot:eq(".$slot.")').show();";
-                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(0)').show();";
-                }              
-                if($shop_item_model[$slot]->card_2){
-                    $js .= "$('.card-slot:eq(".$slot.")').show();";
-                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(1)').show();";
-                }              
-                if($shop_item_model[$slot]->card_3){
-                    $js .= "$('.card-slot:eq(".$slot.")').show();";
-                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(2)').show();";
-                }              
-                if($shop_item_model[$slot]->card_4){
-                    $js .= "$('.card-slot:eq(".$slot.")').show();";
-                    $js .= "$('.card-slot:eq(".$slot.") .slot:eq(3)').show();";
-                }
-                if($shop_item_model[$slot]->enhancement != ''){
-                    $js .= "$('.enhancement:eq(".$slot.")').show();";
-                }
-                if($shop_item_model[$slot]->element){
-                    $js .= "$('.element:eq(".$slot.")').show();";
-                }
-                if($shop_item_model[$slot]->item['item_slot'] == 0 && $shop_item_model[$slot]->item['item_type_id'] == 5){
-                    $js .= "$('.is-element:eq(".$slot.")').show();";
-                    if($shop_item_model[$slot]->element)
-                        $js .= "$('[name=\"isElement\"]:eq(".$slot.")').prop('checked', true);";
-                }
-                $this->registerJs($js, View::POS_READY);
-            } ?>
-        <tbody>
-    </table>
+                            <div class="row weapon element">
+                                <div class="col-md-3">
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]very")
+                                        ->dropDownList(Item::getVeries())
+                                        ->label(false) ?>
+                                </div>
+                                <div class="col-md-3">    
+                                    <?= $form->field($shop_item_model[$slot], "[$slot]element")
+                                        ->dropDownList(Item::getElements())
+                                        ->label(false) ?>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]amount")->textInput()->label(false) ?> </td>
+                        <td class="col-sm-2"> <?= $form->field($shop_item_model[$slot], "[$slot]price")->textInput()->label(false) ?> </td>
+                    </tr>
+
+                <?php 
+                    $js = "";
+                    if($shop_item_model[$slot]->card_1){
+                        $js .= "$('.card-slot:eq(".$slot.")').show();";
+                        $js .= "$('.card-slot:eq(".$slot.") .slot:eq(0)').show();";
+                    }              
+                    if($shop_item_model[$slot]->card_2){
+                        $js .= "$('.card-slot:eq(".$slot.")').show();";
+                        $js .= "$('.card-slot:eq(".$slot.") .slot:eq(1)').show();";
+                    }              
+                    if($shop_item_model[$slot]->card_3){
+                        $js .= "$('.card-slot:eq(".$slot.")').show();";
+                        $js .= "$('.card-slot:eq(".$slot.") .slot:eq(2)').show();";
+                    }              
+                    if($shop_item_model[$slot]->card_4){
+                        $js .= "$('.card-slot:eq(".$slot.")').show();";
+                        $js .= "$('.card-slot:eq(".$slot.") .slot:eq(3)').show();";
+                    }
+                    if($shop_item_model[$slot]->enhancement != ''){
+                        $js .= "$('.enhancement:eq(".$slot.")').show();";
+                    }
+                    if($shop_item_model[$slot]->element){
+                        $js .= "$('.element:eq(".$slot.")').show();";
+                    }
+                    if($shop_item_model[$slot]->item['item_slot'] == 0 && $shop_item_model[$slot]->item['item_type_id'] == 5){
+                        $js .= "$('.is-element:eq(".$slot.")').show();";
+                        if($shop_item_model[$slot]->element)
+                            $js .= "$('[name=\"isElement\"]:eq(".$slot.")').prop('checked', true);";
+                    }
+                    $this->registerJs($js, View::POS_READY);
+                } ?>
+            <tbody>
+        </table>
+    </div>
+    </div>
+
     <div class="form-group">
         <?= Html::submitButton($shop_model->isNewRecord ? 'Open Shop' : 'Update', ['class' => $shop_model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

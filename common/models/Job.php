@@ -12,10 +12,6 @@ use Yii;
  */
 class Job extends \yii\db\ActiveRecord
 {
-    public static function getDb() {
-        return Yii::$app->commondb;
-    }
-
     /**
      * @inheritdoc
      */
