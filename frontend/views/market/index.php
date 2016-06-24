@@ -13,6 +13,8 @@ use common\models\Shop;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
@@ -31,6 +33,7 @@ $label = [
 
 $this->registerJs("
 ", View::POS_READY);
+
 ?>
 
 <div class="shop-item-index">
@@ -48,7 +51,7 @@ $this->registerJs("
                 'value' => function($model){
                     $item = Html::img(Yii::getAlias('@web'). '/images/items/small/'.
                         ItemHelper::getImgFileName($model->item)) .' '.
-                        $model->item['nameSlot'];
+                        Html::a($model->item['nameSlot'], '#', ['onclick' => "detail=window.open('".Url::to(['market/detail', 'id' => $model->id])."','detail',width=600,height=200); return false;"]);
                     return $item;
                 },
                 'format' => 'raw',
@@ -169,8 +172,8 @@ $this->registerJs("
                     $menu .= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']);
                     $menu .= DropdownX::widget([
                         'items' => [
-                            ['label' => 'Report', 'url' => '#'],
-                            ['label' => 'Like', 'url' => '#'],
+                            ['label' => 'Report', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 1]],
+                            ['label' => 'Like', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 2]],
                             '<li class="divider"></li>',
                             ['label' => 'More', 'url' => '#'],
                         ],

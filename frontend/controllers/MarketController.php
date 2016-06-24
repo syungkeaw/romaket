@@ -7,6 +7,7 @@ use common\models\ShopItem;
 use common\models\ShopItemSearch;
 use common\models\Item;
 use common\models\Shop;
+use common\models\Feedback;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -156,5 +157,28 @@ class MarketController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionFeedback($id, $feedback_id)
+    {
+        $feedback = Feedback::findOne(['shop_item_id' => $id, 'feedback_by' => Yii::$app->user->identity->id, 'feedback_id' => $feedback_id]);
+        if(empty($feedback)){
+            $feedback = new Feedback();
+            $feedback->shop_item_id = $id;
+            $feedback->feedback_by = Yii::$app->user->identity->id;
+            $feedback->feedback_id = $feedback_id;
+            $feedback->save();
+        }
+
+        $feedback = [1 => 'Report', 2 => 'Like'];
+        Yii::$app->getSession()->setFlash('success', 'Successful, You have been given a '. $feedback[$feedback_id] .' already.');
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionDetail($id)
+    {
+        $this->layout = 'detail';
+        return $this->render('detail', ['model' => $this->findModel($id)]);
     }
 }

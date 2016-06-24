@@ -14,7 +14,7 @@ use kartik\select2\Select2;
 use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
 
-$this->title = 'Shops';
+$this->title = 'My Shop';
 $this->params['breadcrumbs'][] = $this->title;
 
 $elements = Item::getElements();

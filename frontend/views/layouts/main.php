@@ -36,7 +36,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => Yii::$app->homeUrl],
+        // ['label' => 'Home', 'url' => Yii::$app->homeUrl],
         ['label' => 'Eden', 'url' => ['/market/eden']],
         ['label' => 'Thor', 'url' => ['/market/thor']],
         ['label' => 'Loki', 'url' => ['/market/loki']],
