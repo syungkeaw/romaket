@@ -37,14 +37,12 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => Yii::$app->homeUrl],
+        ['label' => 'Eden', 'url' => ['/market/eden']],
+        ['label' => 'Thor', 'url' => ['/market/thor']],
+        ['label' => 'Loki', 'url' => ['/market/loki']],
         ['label' => 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
+        ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
         ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
-        [
-            'label' => RoHelper::getActiveServerName(), 'items' => [
-                ['label' => 'Thor', 'url' => ['/switch', 'server' => '1']],
-                ['label' => 'Loki', 'url' => ['/switch', 'server' => '2']],
-            ]
-        ],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Sign in', 'url' => ['/user/security/login']];

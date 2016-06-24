@@ -27,6 +27,12 @@ class Shop extends \yii\db\ActiveRecord
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;   
 
+    public static $server = [
+        1 => 'Eden',
+        2 => 'Thor',
+        3 => 'Loki',
+    ];
+
     public function behaviors()
     {
         return [
@@ -62,7 +68,7 @@ class Shop extends \yii\db\ActiveRecord
             [['shop_name', 'location', 'character'], 'string', 'max' => 255],
             ['not_found_count', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['location', 'required', 'message' => 'Location cannot be blank. Please click position in the map below.'],
+            // ['location', 'required', 'message' => 'Location cannot be blank. Please click position in the map below.'],
         ];
     }
 
@@ -100,20 +106,4 @@ class Shop extends \yii\db\ActiveRecord
             'source_id' => 'item_id'
         ])->via('shopItems');
     }
-
-public function beforeSave($insert)
-{
-    if (parent::beforeSave($insert)) {
-
-        if (!Yii::$app->session->isActive){
-            Yii::$app->session->open();
-        }
-
-        $this->server = Yii::$app->session->get('server');
-
-        return true;
-    } else {
-        return false;
-    }
-}
 }

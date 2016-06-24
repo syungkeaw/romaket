@@ -3,84 +3,181 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\classes\ItemHelper;
 use common\classes\RoHelper;
+use kartik\typeahead\Typeahead;
+use yii\helpers\ArrayHelper;
+use yii\web\View;
+use common\models\Item;
+use common\models\Shop;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\ShopSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$maps = [
-    1 => [
-        'id' => '1',
-        'name' => 'Morroc',
-        'map' => 'morroc.jpg',
-    ],
-    2 => [
-        'id' => '2',
-        'name' => 'Prontera',
-        'map' => 'prontera.jpg',
-    ], 
-];
 
 $this->title = 'Shops';
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="shop-index">
-    <h2>Server: <?= RoHelper::getActiveServerName() ?></h2>
-    <p>
-        <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <div class="row">
-    <?php foreach ($dataProvider->getModels() as $model) { ?>
 
-        <div class="col-sm-6 col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title ellipsis" style="max-width: 250px !important;">
-                        <?= $model->shop_name ?> <small><?= $maps[$model->map]['name'] ?> (<?= $model->location ?>)</small></h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead><tr><th>Items</th><th class="text-right">Price</th><th></th></tr></thead>
-                        <tbody>
-                        <?php foreach (range(0, 11) as $slot) { 
-                                $item_img = Yii::getAlias('@web'). '/images/item_slot.jpg';
-                                $item_name = '';
-                                $item_price = 0;
-                                if(isset($model->shopItems[$slot])){
-                                    $item_img = Yii::getAlias('@web'). '/images/items/small/' . $model->shopItems[$slot]->item->source_id .'.gif';
-                                    $item_name = $model->shopItems[$slot]->item->item_name;
-                                    $item_price = number_format($model->shopItems[$slot]->price);
-                                }
-                        ?>
-                            <tr style="height:42px">
-                                <td><div class="ellipsis"><small><?= Html::img($item_img) .' '. $item_name ?></small></div></td>
-                                <td class="text-right"><small><?= $item_name ? $item_price. ' zeny' : '' ?></small></td>
-                                <td class="text-right">
-                                    <?php if(!empty($item_name)){ ?>
-                                    <div class="dropdown">
-                                    <?= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']) ?>
-                                    <?= DropdownX::widget([
-                                        'items' => [
-                                            ['label' => '100 reports'],
-                                            '<li class="divider"></li>',
-                                            ['label' => 'Open', 'url' => '#'],
-                                            ['label' => 'Close', 'url' => '#'],
-                                        ],
-                                    ]) ?>
-                                    </div>
-                                    <?php } ?>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
-                    <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-xs']) ?>
-                    <?= Html::a('<span class="glyphicon glyphicon-ban-circle"></span> Close', ['delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs']) ?>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
-    </div>
-</div>
+$elements = Item::getElements();
+$very = Item::getVeries();
+$label = [
+    '',
+    ['label' => 'danger', 'icon' => '994'],
+    ['label' => 'info', 'icon' => '995'],
+    ['label' => 'success', 'icon' => '996'],
+    ['label' => 'default', 'icon' => '997'],
+];
+
+$this->registerJs("
+", View::POS_READY);
+?>
+
+<div class="shop-item-index">
+
+<p>
+    <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
+</p>
+
+<?php Pjax::begin(); ?>
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'item.item_name',
+                'label' => 'Items',
+                'value' => function($model){
+                    $item = Html::img(Yii::getAlias('@web'). '/images/items/small/'.
+                        ItemHelper::getImgFileName($model->item)) .' '.
+                        $model->item['nameSlot'];
+                    return $item;
+                },
+                'format' => 'raw',
+                'filter' => Typeahead::widget([
+                    'name' => 'ShopItemSearch[item.item_name]',
+                    'value' => $searchModel['item.item_name'],
+                    'dataset' => [
+                        [
+                            'local' => ArrayHelper::getColumn($items, 'item_name'),
+                            'limit' => 10,
+                        ],
+                    ],
+                    'pluginOptions' => ['highlight' => true],
+                    'pluginEvents' => [
+                        "typeahead:change" => "function() { $(this).change() }",
+                        "typeahead:select" => "function() { $(this).change() }",
+                    ],
+
+                ]),
+                'headerOptions' => [
+                    'class' => 'col-md-4'
+                ],
+            ],
+            [
+                'attribute' => 'enhancement',
+                'label' => 'Enhanced',
+                'value' => function($model){
+                    return $model->enhancement ? '+'.$model->enhancement : '';
+                },
+               'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
+                'filter' => Html::dropDownList(
+                    'ShopItemSearch[enhancement]',
+                    $searchModel['enhancement'],
+                    ['' => ''] + Item::getEnhancements(),
+                    ['class' => 'form-control']
+                ),
+            ],
+            [
+                'attribute' => 'option',
+                'label' => 'Option',
+                'value' => function($model) use ($elements, $very, $items, $label){
+                    $option = '';
+
+                    foreach(range(1, 4) as $slot){
+                        $option .= $model->{'card_'.$slot} ? '['. Html::img(Yii::getAlias('@web'). '/images/items/small/'. 'card.gif') . $model->{'itemCard'.$slot}['item_name'] . ']<br>' : '';
+                    }
+
+                    $option .= $model->very ? ' '. $very[$model->very] : '';
+                    $option .= $model->element ? 
+                        Html::img(Yii::getAlias('@web'). '/images/items/small/'. $label[$model->element]['icon']. '.gif').
+                        ' <span class="label label-'. $label[$model->element]['label'] .'">'. $elements[$model->element].'</span>' : '';
+                    return $option;
+                },
+                'headerOptions' => [
+                    'class' => 'col-md-2'
+                ],
+                'format' => 'raw',
+                'filter' => Select2::widget([
+                    'name' => 'ShopItemSearch[option]',
+                    'value' => $searchModel['option'],
+                    'data' => ArrayHelper::map($option_item, 'source_id', 'nameSlot'),
+                    'options' => ['placeholder' => 'Select a card or an element ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'templateResult' => new JsExpression('function format(item) {
+                            return \'<img src="'. Yii::getAlias('@web'). '/images/items/small/' .'\' + (item.text.toLowerCase().indexOf(\'card\') > -1 ? \'card\' : item.id) + \'.gif"/> \' + item.text;
+                        }'),
+                        'escapeMarkup' => new JsExpression('function(m) { return m; }'),
+                    ],
+                ]),
+            ],
+            [
+                'attribute' => 'price',
+                'label' => 'Price (Zeny)',
+                'value' => function($model){
+                    return number_format($model->price);
+                },
+               'headerOptions' => [
+                    'class' => 'col-md-2'
+                ],
+            ],
+            [
+                'attribute' => 'shop.shop_name',
+                'label' => 'Shop',
+                'value' => function($model){
+                    return '<div class="ellipsis" title="'. $model->shop->shop_name .'">'. $model->shop->shop_name. '</div>';
+                },
+                'format' => 'raw',
+                'headerOptions' => [
+                    'class' => 'col-md-1',
+                ],
+            ],
+            [
+                'attribute' => 'shop.server',
+                'filter' => Html::dropDownList('ShopItemSearch[shop.server]', $searchModel['shop.server'], ['' => 'All Server'] + Shop::$server, 
+                ['class' => 'form-control']),
+                'value' => function($model){
+                    return Shop::$server[$model->shop['server']];
+                },
+                'headerOptions' => [
+                    'class' => 'col-md-1',
+                ],
+            ],
+            [
+                'value' => function($model){
+                    $menu = Html::beginTag('div', ['class'=>'dropdown']);
+                    $menu .= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']);
+                    $menu .= DropdownX::widget([
+                        'items' => [
+                            ['label' => 'Edit Shop', 'url' => ['update', 'id' => $model->shop['id']]],
+                            ['label' => 'Close Shop', 'url' => '#'],
+                            ['label' => 'Delete Shop', 'url' => '#'],
+                            '<li class="divider"></li>',
+                            ['label' => 'Close Item', 'url' => '#'],
+                        ],
+                    ]); 
+                    $menu .= Html::endTag('div');
+                    return $menu;
+                },
+                'format' => 'raw',
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
+            ],
+        ],
+    ]); ?>
+<?php Pjax::end(); ?></div>
+
+

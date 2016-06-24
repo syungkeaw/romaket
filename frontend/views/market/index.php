@@ -9,6 +9,7 @@ use kartik\typeahead\Typeahead;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 use common\models\Item;
+use common\models\Shop;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
@@ -28,17 +29,15 @@ $label = [
     ['label' => 'default', 'icon' => '997'],
 ];
 
-
 $this->registerJs("
-
 ", View::POS_READY);
-
 ?>
+
 <div class="shop-item-index">
+<?php Pjax::begin(); ?>
+<h3><?= $server ?> <small><?= Html::a('<span class="glyphicon glyphicon-refresh"></span> Clear', ['']) ?></small></h3>
 
-<h2>Server: <?= RoHelper::getActiveServerName() ?></h2>
-
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -52,7 +51,7 @@ $this->registerJs("
                         $model->item['nameSlot'];
                     return $item;
                 },
-                'format' => 'html',
+                'format' => 'raw',
                 'filter' => Typeahead::widget([
                     'name' => 'ShopItemSearch[item.item_name]',
                     'value' => $searchModel['item.item_name'],
@@ -158,7 +157,7 @@ $this->registerJs("
             [
                 'attribute' => 'updated_at',
                 'label' => 'Latest',
-                'format' => ['date', 'php:d M Y H:i:s'],
+                'format' => ['date', 'php:d/H:i'],
                 'filter' => false,
                 'headerOptions' => [
                     'class' => 'col-md-1'
@@ -187,3 +186,5 @@ $this->registerJs("
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
+
+

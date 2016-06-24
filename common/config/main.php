@@ -6,6 +6,6 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
-    'defaultRoute' => 'market/',
+    'defaultRoute' => 'market',
     'timeZone' => 'Asia/Bangkok',
 ];

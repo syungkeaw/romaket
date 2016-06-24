@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use frontend\assets\Select23Asset;
 use common\models\Item;
+use common\models\Shop;
 use yii\widgets\MaskedInput;
 
 Select23Asset::register($this);
@@ -218,6 +219,7 @@ $this->registerCss("
             <?php $form = ActiveForm::begin(); ?>
             <div class="row">
                 <div class="col-md-6">
+                    <?= $form->field($shop_model, 'server')->dropDownList(Shop::$server) ?>
                     <?= $form->field($shop_model, 'shop_name')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($shop_model, 'character')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($shop_model, 'map')->dropDownList(ArrayHelper::map($maps, 'id', 'name')) ?>

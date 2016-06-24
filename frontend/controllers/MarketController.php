@@ -32,14 +32,34 @@ class MarketController extends Controller
         ];
     }
 
-    /**
-     * Lists all ShopItem models.
-     * @return mixed
-     */
     public function actionIndex()
+    {
+        return $this->redirect(['eden']);
+    }
+
+    public function actionEden()
+    {
+        $server = 1;
+        return $this->renderMarket($server);       
+    }
+
+    public function actionThor()
+    {
+        $server = 2;
+        return $this->renderMarket($server);
+    }
+
+    public function actionLoki()
+    {
+        $server = 3;
+        return $this->renderMarket($server);
+    }
+
+    public function renderMarket($server)
     {
         $searchModel = new ShopItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['shop.server' => $server]);
         $items = Item::find()->all();
 
         $shopItem = ShopItem::find()->asArray()->all();
@@ -51,15 +71,12 @@ class MarketController extends Controller
         $option = array_filter($option);
         $option_item = Item::findAll(['source_id' => ['994', '995', '996', '997'] + $option]);
 
-
-        // echo '<pre>', print_r(Yii::$app->session);
-        // die;
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'items' => $items,
             'option_item' => $option_item,
+            'server' => Shop::$server[$server],
         ]);
     }
 

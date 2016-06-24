@@ -11,6 +11,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\Model;
+use common\models\ShopItemSearch;
+use yii\helpers\ArrayHelper;
 
 /**
  * ShopController implements the CRUD actions for Shop model.
@@ -38,12 +40,26 @@ class ShopController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ShopSearch();
+        $searchModel = new ShopItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['shop.created_by' => Yii::$app->user->identity->id]);
+        $dataProvider->pagination->pageSize = 10;
+        $items = Item::find()->all();
+
+        $shopItem = ShopItem::find()->asArray()->all();
+        $option = [];
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_1'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_2'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_3'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_4'));
+        $option = array_filter($option);
+        $option_item = Item::findAll(['source_id' => ['994', '995', '996', '997'] + $option]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'items' => $items,
+            'option_item' => $option_item,
         ]);
     }
 

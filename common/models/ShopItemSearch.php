@@ -17,7 +17,7 @@ class ShopItemSearch extends ShopItem
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name', 'shop.character', 'option']);
+        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name', 'shop.character', 'shop.server', 'option']);
     }
 
     /**
@@ -26,7 +26,7 @@ class ShopItemSearch extends ShopItem
     public function rules()
     {
         return [
-            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at', 'enhancement'], 'integer'],
+            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at', 'enhancement', 'shop.server'], 'integer'],
             [['item_id', 'item.item_name', 'shop.shop_name', 'shop.character', 'option'], 'string'],
         ];
     }
@@ -61,6 +61,7 @@ class ShopItemSearch extends ShopItem
                    'item.item_name', 
                    'shop.shop_name',
                    'shop.character',
+                   'shop.server',
                    'price', 
                    'amount', 
                    'updated_at', 
@@ -78,10 +79,6 @@ class ShopItemSearch extends ShopItem
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'server' => RoHelper::getActiveServerId(),
-        ]);
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -96,6 +93,8 @@ class ShopItemSearch extends ShopItem
         $query->andFilterWhere(['like', 'item.item_name', $this->getAttribute('item.item_name')]);
         $query->andFilterWhere(['like', 'shop.shop_name', $this->getAttribute('shop.shop_name')]);
         $query->andFilterWhere(['like', 'shop.character', $this->getAttribute('shop.character')]);
+
+        $query->andFilterWhere(['shop.server' => $this->getAttribute('shop.server')]);
 
         // if(preg_match('/\\[\\d\\]/', $this->getAttribute('item.item_name'), $matches)){
         //     $query->andFilterWhere(['item.item_slot' => str_replace(['[', ']'], '', $matches[0])]);
