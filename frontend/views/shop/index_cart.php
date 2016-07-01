@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title ellipsis" style="max-width: 250px !important;">
-                                        <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $maps[$model->map]['name'] ?> (<?= $model->location ?>)</small></h3>
+                                       <?= $model->status ? '<span class="glyphicon glyphicon-ok"></span>' : '<span class="glyphicon glyphicon-remove"></span>' ?> <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $maps[$model->map]['name'] ?> (<?= $model->location ?>)</small></h3>
                                 </div>
                                 <div class="panel-body">
                                     <table class="table table-hover">
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </tbody>
                                     </table>
                                     <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-xs']) ?>
-                                    <?= Html::a('<span class="glyphicon glyphicon-ban-circle"></span> Close', ['delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs']) ?>
+                                    <?= $model->status ? Html::a('<span class="glyphicon glyphicon-ban-circle"></span> Close', ['close', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs']) : Html::a('<span class="glyphicon glyphicon-bullhorn"></span> Open', ['open', 'id' => $model->id], ['class' => 'btn btn-success btn-xs'])?>
                                 </div>
                             </div>
                         </div>
