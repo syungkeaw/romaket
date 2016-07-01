@@ -39,30 +39,40 @@ return [
             'clients' => [
                 'facebook' => [
                     'class'        => 'dektrium\user\clients\Facebook',
-                    'clientId'     => '474331226040204',
-                    'clientSecret' => '23998583a8903bd071ba0acc3ee1db33',
+                    'clientId'     => '739785062828151',
+                    'clientSecret' => '80a1d1ab17182a3afd03f2485ece6b10',
+                    'viewOptions' => ['popupWidth' => 1024, 'popupHeight' => 860,]  
                 ],
-                'twitter' => [
-                    'class'          => 'dektrium\user\clients\Twitter',
-                    'consumerKey'    => 'CONSUMER_KEY',
-                    'consumerSecret' => 'CONSUMER_SECRET',
-                ],
-                'google' => [
-                    'class'        => 'dektrium\user\clients\Google',
-                    'clientId'     => 'CLIENT_ID',
-                    'clientSecret' => 'CLIENT_SECRET',
-                ],
+                // 'twitter' => [
+                //     'class'          => 'dektrium\user\clients\Twitter',
+                //     'consumerKey'    => 'CONSUMER_KEY',
+                //     'consumerSecret' => 'CONSUMER_SECRET',
+                // ],
+                // 'google' => [
+                //     'class'        => 'dektrium\user\clients\Google',
+                //     'clientId'     => 'CLIENT_ID',
+                //     'clientSecret' => 'CLIENT_SECRET',
+                // ],
             ],
         ],
     ],
     'modules' => [
         'user' => [
             'class' => 'dektrium\user\Module',
-            // 'enableUnconfirmedLogin' => true,
+            'enableUnconfirmedLogin' => true,
             'enableFlashMessages' => false,
             // 'confirmWithin' => 21600,
             'cost' => 12,
             'admins' => ['admin'],
+            'controllerMap' => [
+                'registration' => [
+                    'class' => \dektrium\user\controllers\RegistrationController::className(),
+                    'on ' . \dektrium\user\controllers\RegistrationController::EVENT_AFTER_REGISTER => function ($e) {
+                        Yii::$app->response->redirect(array('/user/login'))->send();
+                        Yii::$app->end();
+                    }
+                ],
+            ],
         ],
     ],
     'params' => $params,

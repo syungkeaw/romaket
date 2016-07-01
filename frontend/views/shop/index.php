@@ -32,10 +32,17 @@ $this->registerJs("
 ?>
 
 <div class="shop-item-index">
+<div class="row">  
+    <div class="col-md-6">
+        <p>
+            <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
+    </div>
+    <div class="col-md-6 text-right">
+        <?= Html::a('<span class="glyphicon glyphicon-shopping-cart"></span> Cart View', ['cart'], ['class' => 'btn btn-default']) ?>
+    </div>
+</div>
 
-<p>
-    <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
-</p>
 
 <?php Pjax::begin(); ?>
 <?= GridView::widget([
@@ -69,9 +76,6 @@ $this->registerJs("
                     ],
 
                 ]),
-                'headerOptions' => [
-                    'class' => 'col-md-4'
-                ],
             ],
             [
                 'attribute' => 'enhancement',
@@ -79,9 +83,6 @@ $this->registerJs("
                 'value' => function($model){
                     return $model->enhancement ? '+'.$model->enhancement : '';
                 },
-               'headerOptions' => [
-                    'class' => 'col-md-1'
-                ],
                 'filter' => Html::dropDownList(
                     'ShopItemSearch[enhancement]',
                     $searchModel['enhancement'],
@@ -105,9 +106,6 @@ $this->registerJs("
                         ' <span class="label label-'. $label[$model->element]['label'] .'">'. $elements[$model->element].'</span>' : '';
                     return $option;
                 },
-                'headerOptions' => [
-                    'class' => 'col-md-2'
-                ],
                 'format' => 'raw',
                 'filter' => Select2::widget([
                     'name' => 'ShopItemSearch[option]',
@@ -129,21 +127,28 @@ $this->registerJs("
                 'value' => function($model){
                     return number_format($model->price);
                 },
-               'headerOptions' => [
-                    'class' => 'col-md-2'
-                ],
             ],
             [
                 'attribute' => 'shop.shop_name',
                 'label' => 'Shop',
+                // 'filter' => Html::dropDownList(
+                //     'ShopItemSearch[shop.shop_name]', 
+                //     $searchModel['shop.shop_name'], 
+                //     ['' => 'All'] + ArrayHelper::map(Shop::findAll(['created_by' => Yii::$app->user->identity->id]), 'shop_name', 'shop_name'), 
+                //     ['class' => 'form-control']
+                // ),
                 'value' => function($model){
                     return '<div class="ellipsis" title="'. $model->shop->shop_name .'">'. $model->shop->shop_name. '</div>';
                 },
                 'format' => 'raw',
-                'headerOptions' => [
-                    'class' => 'col-md-1',
-                ],
             ],
+            [
+                'attribute' => 'price',
+                'label' => 'Price (Zeny)',
+                'value' => function($model){
+                    return number_format($model->price);
+                },
+            ],  
             [
                 'attribute' => 'shop.server',
                 'filter' => Html::dropDownList('ShopItemSearch[shop.server]', $searchModel['shop.server'], ['' => 'All Server'] + Shop::$server, 
@@ -151,9 +156,22 @@ $this->registerJs("
                 'value' => function($model){
                     return Shop::$server[$model->shop['server']];
                 },
-                'headerOptions' => [
-                    'class' => 'col-md-1',
-                ],
+            ],
+            [
+                'value' => function($model){
+                    return $model->shop['status'] == 10 && $model['status'] == 10 ? 
+                        '<span class="glyphicon glyphicon-ok"></span>' : 
+                        '<span class="glyphicon glyphicon-remove"></span>';
+                },
+                'filter' => Html::dropDownList('ShopItemSearch[shop.status]', $searchModel['shop.status'], ['' => 'All','10' => 'O', '0' => 'C'], 
+                ['class' => 'form-control']),
+                'format' => 'raw',
+            ],
+            [
+                'value' => function($model){
+                    return '<span class="glyphicon glyphicon-thumbs-up"></span> '. $model->like. ' <span class="glyphicon glyphicon-thumbs-down"></span> ' .$model->report;
+                },
+                'format' => 'raw',
             ],
             [
                 'value' => function($model){
@@ -162,10 +180,15 @@ $this->registerJs("
                     $menu .= DropdownX::widget([
                         'items' => [
                             ['label' => 'Edit Shop', 'url' => ['update', 'id' => $model->shop['id']]],
-                            ['label' => 'Close Shop', 'url' => '#'],
-                            ['label' => 'Delete Shop', 'url' => '#'],
+                            ($model->shop['status'] == 10 ? 
+                                ['label' => 'Close Shop', 'url' => ['close', 'id' => $model->shop['id']]] :
+                                ['label' => 'Open Shop', 'url' => ['open', 'id' => $model->shop['id']]])
+                            ,
+                            // ['label' => 'Delete Shop', 'url' => ['delete', 'id' => $model->shop['id']]],
                             '<li class="divider"></li>',
-                            ['label' => 'Close Item', 'url' => '#'],
+                            ($model['status'] == 10 ? 
+                                ['label' => 'Close Item', 'url' => ['shop-item/close', 'id' => $model['id']]] :
+                                ['label' => 'Open Item', 'url' => ['shop-item/open', 'id' => $model['id']]])
                         ],
                     ]); 
                     $menu .= Html::endTag('div');
@@ -173,7 +196,7 @@ $this->registerJs("
                 },
                 'format' => 'raw',
                 'headerOptions' => [
-                    'class' => 'col-md-1'
+                    'style' => 'width:30px'
                 ],
             ],
         ],

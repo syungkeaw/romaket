@@ -61,6 +61,8 @@ class MarketController extends Controller
         $searchModel = new ShopItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['shop.server' => $server]);
+        $dataProvider->query->andFilterWhere(['shop.status' => 10]);
+        $dataProvider->query->andFilterWhere(['shop_item.status' => 10]);
         $items = Item::find()->all();
 
         $shopItem = ShopItem::find()->asArray()->all();

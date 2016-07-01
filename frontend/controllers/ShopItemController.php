@@ -106,6 +106,33 @@ class ShopItemController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionClose($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = 0;
+
+        if($model->save()){
+            Yii::$app->getSession()->setFlash('success', 'Successful, ...');
+        }else{
+            Yii::$app->getSession()->setFlash('danger', 'Fail, ...');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionOpen($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = 10;
+
+        if($model->save()){
+            Yii::$app->getSession()->setFlash('success', 'Successful, ...');
+        }else{
+            Yii::$app->getSession()->setFlash('danger', 'Fail, ...');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
     /**
      * Finds the ShopItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

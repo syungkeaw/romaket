@@ -24,9 +24,6 @@ $this->title = $model->item->nameSlot;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'item_id',
-            'shop_id',
             'price',
             'amount',
             'created_at',

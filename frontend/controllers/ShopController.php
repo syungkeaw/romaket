@@ -64,6 +64,34 @@ class ShopController extends Controller
     }
 
     /**
+     * Lists all Shop models.
+     * @return mixed
+     */
+    public function actionCart()
+    {
+        $searchModel = new ShopSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['shop.created_by' => Yii::$app->user->identity->id]);
+        $items = Item::find()->all();
+
+        $shopItem = ShopItem::find()->asArray()->all();
+        $option = [];
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_1'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_2'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_3'));
+        $option = array_merge($option, ArrayHelper::getColumn($shopItem, 'card_4'));
+        $option = array_filter($option);
+        $option_item = Item::findAll(['source_id' => ['994', '995', '996', '997'] + $option]);
+
+        return $this->render('index_cart', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'items' => $items,
+            'option_item' => $option_item,
+        ]);
+    }
+
+    /**
      * Displays a single Shop model.
      * @param integer $id
      * @return mixed
@@ -142,7 +170,35 @@ class ShopController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionClose($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = 0;
+
+        if($model->save()){
+            Yii::$app->getSession()->setFlash('success', 'Successful, ...');
+        }else{
+            Yii::$app->getSession()->setFlash('danger', 'Fail, ...');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionOpen($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = 10;
+        
+        if($model->save()){
+            Yii::$app->getSession()->setFlash('success', 'Successful, ...');
+        }else{
+            Yii::$app->getSession()->setFlash('danger', 'Fail, ...');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

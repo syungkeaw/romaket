@@ -17,7 +17,7 @@ class ShopItemSearch extends ShopItem
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name', 'shop.character', 'shop.server', 'option']);
+        return array_merge(parent::attributes(), ['item.item_name', 'shop.shop_name', 'shop.character', 'shop.server', 'shop.status', 'option']);
     }
 
     /**
@@ -26,7 +26,7 @@ class ShopItemSearch extends ShopItem
     public function rules()
     {
         return [
-            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at', 'enhancement', 'shop.server'], 'integer'],
+            [['id', 'shop_id', 'price', 'amount', 'created_at', 'updated_at', 'enhancement', 'shop.server', 'shop.status'], 'integer'],
             [['item_id', 'item.item_name', 'shop.shop_name', 'shop.character', 'option'], 'string'],
         ];
     }
@@ -62,6 +62,7 @@ class ShopItemSearch extends ShopItem
                    'shop.shop_name',
                    'shop.character',
                    'shop.server',
+                   'shop.status',
                    'price', 
                    'amount', 
                    'updated_at', 
@@ -96,6 +97,18 @@ class ShopItemSearch extends ShopItem
 
         $query->andFilterWhere(['shop.server' => $this->getAttribute('shop.server')]);
 
+        if($this->getAttribute('shop.status') == 0){
+            $query->andFilterWhere(
+                ['or', 
+                    ['shop.status' => $this->getAttribute('shop.status')],
+                    ['shop_item.status' => $this->getAttribute('shop.status')]
+            ]);
+        }else if($this->getAttribute('shop.status') == 10){
+            $query->andFilterWhere(['shop.status' => $this->getAttribute('shop.status')]);
+            $query->andFilterWhere(['shop_item.status' => $this->getAttribute('shop.status')]);
+        }
+        
+
         // if(preg_match('/\\[\\d\\]/', $this->getAttribute('item.item_name'), $matches)){
         //     $query->andFilterWhere(['item.item_slot' => str_replace(['[', ']'], '', $matches[0])]);
         // }
@@ -109,7 +122,7 @@ class ShopItemSearch extends ShopItem
             $query->andFilterWhere(
                 ['or', 
                     ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
-                    ['or', ['card_1' => $this->getAttribute('option')], ['card_2' => $this->getAttribute('option')]],
+                    ['or', ['card_3' => $this->getAttribute('option')], ['card_4' => $this->getAttribute('option')]],
                 ]
             );
         }

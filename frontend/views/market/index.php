@@ -168,14 +168,15 @@ $this->registerJs("
             ],
             [
                 'value' => function($model){
+                    if(Yii::$app->user->isGuest) return '';
+
                     $menu = Html::beginTag('div', ['class'=>'dropdown']);
                     $menu .= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']);
                     $menu .= DropdownX::widget([
                         'items' => [
                             ['label' => 'Report', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 1]],
                             ['label' => 'Like', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 2]],
-                            '<li class="divider"></li>',
-                            ['label' => 'More', 'url' => '#'],
+                            // '<li class="divider"></li>',
                         ],
                     ]); 
                     $menu .= Html::endTag('div');

@@ -117,4 +117,18 @@ class ShopItem extends \yii\db\ActiveRecord
             'id' => 'shop_id'
         ]);
     }
+
+    public function getLike()
+    {
+        return $this->hasMany(Feedback::className(), [
+            'shop_item_id' => 'id',
+        ])->andFilterWhere(['feedback_id' => 2])->count();
+    }
+
+    public function getReport()
+    {
+        return $this->hasMany(Feedback::className(), [
+            'shop_item_id' => 'id',
+        ])->andFilterWhere(['feedback_id' => 1])->count();
+    }    
 }

@@ -23,7 +23,7 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body style="background: #f1f1f1">
+<body>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -41,7 +41,7 @@ AppAsset::register($this);
         ['label' => 'Thor', 'url' => ['/market/thor']],
         ['label' => 'Loki', 'url' => ['/market/loki']],
         ['label' => 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
-        ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
+        // ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
         ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
     ];
     if (Yii::$app->user->isGuest) {

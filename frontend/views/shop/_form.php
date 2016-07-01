@@ -225,10 +225,11 @@ $this->registerCss("
                     <?= $form->field($shop_model, 'map')->dropDownList(ArrayHelper::map($maps, 'id', 'name')) ?>
                     <?= $form->field($shop_model, 'location')->textInput(['maxlength' => true, 'readonly' => true]) ?>
                 </div>
-                <div class="col-md-6 text-center">
+                <div class="col-md-6">
                     <div class="map-picker">
                     <?= Html::img(Yii::$app->params['map_path'].'map-1.jpg') ?>
                     </div>
+                    <p>Click on the map above to fill location.</p>
                 </div>
             </div>
         </div>
