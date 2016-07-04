@@ -19,20 +19,6 @@ $('#myTabs a').click(function (e) {
 })
 ", View::POS_READY);
 
-
-$maps = [
-    1 => [
-        'id' => '1',
-        'name' => 'Morroc',
-        'map' => 'morroc.jpg',
-    ],
-    2 => [
-        'id' => '2',
-        'name' => 'Prontera',
-        'map' => 'prontera.jpg',
-    ], 
-];
-
 $this->title = 'Shops';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -57,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title ellipsis" style="max-width: 250px !important;">
-                                       <?= $model->status ? '<span class="glyphicon glyphicon-ok"></span>' : '<span class="glyphicon glyphicon-remove"></span>' ?> <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $maps[$model->map]['name'] ?> (<?= $model->location ?>)</small></h3>
+                                       <?= $model->status ? '<span class="glyphicon glyphicon-ok"></span>' : '<span class="glyphicon glyphicon-remove"></span>' ?> <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $model->map ?> (<?= $model->location ?>)</small></h3>
                                 </div>
                                 <div class="panel-body">
                                     <table class="table table-hover">
@@ -72,9 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     $item_name .= ($model->shopItems[$slot]->enhancement ? '+'. $model->shopItems[$slot]->enhancement  : '') .' ';
                                                     $item_name .= $model->shopItems[$slot]->item->nameSlot;
                                                     $item_price = number_format($model->shopItems[$slot]->price);
+                                                    $item_status = $model->shopItems[$slot]->status;
                                                 }
                                         ?>
-                                            <tr style="height:42px">
+                                            <tr style="height:42px; <?= $item_status === 0 ? 'background: #ddd;' : '' ?>">
                                                 <td><div class="ellipsis"><small><?= Html::img($item_img) .' '. $item_name ?></small></div></td>
                                                 <td class="text-right"><small><?= $item_name ? $item_price. ' zeny' : '' ?></small></td>
                                                 <td class="text-right">
@@ -83,10 +70,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <?= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']) ?>
                                                     <?= DropdownX::widget([
                                                         'items' => [
-                                                            ['label' => '100 reports'],
-                                                            '<li class="divider"></li>',
-                                                            ['label' => 'Open', 'url' => '#'],
-                                                            ['label' => 'Close', 'url' => '#'],
+                                                            // ['label' => '100 reports'],
+                                                            // '<li class="divider"></li>',
+                                                            ($item_status === 10 ? 
+                                                                ['label' => 'Close Item', 'url' => ['shop-item/close', 'id' => $model->shopItems[$slot]->id]] :
+                                                                ['label' => 'Open Item', 'url' => ['shop-item/open', 'id' => $model->shopItems[$slot]->id]])
                                                         ],
                                                     ]) ?>
                                                     </div>

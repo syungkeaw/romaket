@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'KuyRO',
+        'brandLabel' => 'KuyRO <small>Beta</small>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -38,8 +38,8 @@ AppAsset::register($this);
     $menuItems = [
         // ['label' => 'Home', 'url' => Yii::$app->homeUrl],
         ['label' => 'Eden', 'url' => ['/market/eden']],
-        ['label' => 'Thor', 'url' => ['/market/thor']],
-        ['label' => 'Loki', 'url' => ['/market/loki']],
+        // ['label' => 'Thor', 'url' => ['/market/thor']],
+        // ['label' => 'Loki', 'url' => ['/market/loki']],
         ['label' => 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
         // ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
         ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],

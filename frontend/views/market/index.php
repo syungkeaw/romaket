@@ -32,7 +32,15 @@ $label = [
 ];
 
 $this->registerJs("
-", View::POS_READY);
+    function popupwindow(url, title, w, h) {
+        wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+        wTop = window.screenTop ? window.screenTop : window.screenY;
+
+        var left = wLeft + (window.innerWidth / 2) - (w / 2);
+        var top = wTop + (window.innerHeight / 2) - (h / 2);
+        return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+", View::POS_HEAD);
 
 ?>
 
@@ -51,7 +59,7 @@ $this->registerJs("
                 'value' => function($model){
                     $item = Html::img(Yii::getAlias('@web'). '/images/items/small/'.
                         ItemHelper::getImgFileName($model->item)) .' '.
-                        Html::a($model->item['nameSlot'], '#', ['onclick' => "detail=window.open('".Url::to(['market/detail', 'id' => $model->id])."','detail',width=600,height=200); return false;"]);
+                        Html::a($model->item['nameSlot'], '#', ['onclick' => "detail=popupwindow('".Url::to(['market/detail', 'id' => $model->id])."','detail','900','900'); return false;"]);
                     return $item;
                 },
                 'format' => 'raw',

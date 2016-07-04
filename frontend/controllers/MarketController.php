@@ -44,17 +44,17 @@ class MarketController extends Controller
         return $this->renderMarket($server);       
     }
 
-    public function actionThor()
-    {
-        $server = 2;
-        return $this->renderMarket($server);
-    }
+    // public function actionThor()
+    // {
+    //     $server = 2;
+    //     return $this->renderMarket($server);
+    // }
 
-    public function actionLoki()
-    {
-        $server = 3;
-        return $this->renderMarket($server);
-    }
+    // public function actionLoki()
+    // {
+    //     $server = 3;
+    //     return $this->renderMarket($server);
+    // }
 
     public function renderMarket($server)
     {

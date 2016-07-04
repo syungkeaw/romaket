@@ -20,7 +20,7 @@ class m160606_115915_create_shop extends Migration
         $this->createTable('shop', [
             'id' => $this->primaryKey(),
             'shop_name' => $this->string(),
-            'map' => $this->integer(2),
+            'map' => $this->string(),
             'location' => $this->string(),
             'character' => $this->string(),
             'not_found_count' => $this->integer(),

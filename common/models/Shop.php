@@ -29,8 +29,8 @@ class Shop extends \yii\db\ActiveRecord
 
     public static $server = [
         1 => 'Eden',
-        2 => 'Thor',
-        3 => 'Loki',
+        // 2 => 'Thor',
+        // 3 => 'Loki',
     ];
 
     public function behaviors()
@@ -64,8 +64,8 @@ class Shop extends \yii\db\ActiveRecord
     {
         return [
             [['shop_name', 'map'], 'required'],
-            [['map','not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at', 'server'], 'integer'],
-            [['shop_name', 'location', 'character'], 'string', 'max' => 255],
+            [['not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at', 'server'], 'integer'],
+            [['shop_name', 'location', 'character', 'map'], 'string', 'max' => 255],
             ['not_found_count', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             // ['location', 'required', 'message' => 'Location cannot be blank. Please click position in the map below.'],

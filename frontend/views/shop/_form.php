@@ -15,18 +15,13 @@ Select23Asset::register($this);
 /* @var $model common\models\Shop */
 /* @var $form yii\widgets\ActiveForm */
 
-$maps = [
-    [
-        'id' => '1',
-        'name' => 'Morroc',
-        'map' => 'morroc.jpg',
-    ],
-    [
-        'id' => '2',
-        'name' => 'Prontera',
-        'map' => 'prontera.jpg',
-    ], 
-];
+foreach(glob('../web/images/maps/*.*') as $filename){
+    $filename = str_replace('../web/images/maps/', '', $filename);
+    $filename = str_replace('.gif', '', $filename);
+    $maps[$filename] = $filename;
+ }
+// echo '<pre>', print_r($maps);
+// die;
 
 $items = '';
 foreach($item_model as $item){
@@ -36,7 +31,7 @@ foreach($item_model as $item){
 $this->registerJs("
     $('#shop-map').change(function(){
         var map = $('.map-picker>img');
-        map.attr('src', map.attr('src').replace(/map-[\d]/, 'map-' + $(this).val()));
+        map.attr('src', '../images/maps/' + $(this).val() + '.gif');
         $('div.dot').remove();
         $('#shop-location').val('');
     });
@@ -198,8 +193,8 @@ $this->registerJs("
 
 $this->registerCss("
 .map-picker {
-    height: 300px;
-    width: 300px;
+    height: 400px;
+    width: 400px;
 }
 .map-picker>img {
     height: 100%;
@@ -222,12 +217,12 @@ $this->registerCss("
                     <?= $form->field($shop_model, 'server')->dropDownList(Shop::$server) ?>
                     <?= $form->field($shop_model, 'shop_name')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($shop_model, 'character')->textInput(['maxlength' => true]) ?>
-                    <?= $form->field($shop_model, 'map')->dropDownList(ArrayHelper::map($maps, 'id', 'name')) ?>
+                    <?= $form->field($shop_model, 'map')->dropDownList($maps) ?>
                     <?= $form->field($shop_model, 'location')->textInput(['maxlength' => true, 'readonly' => true]) ?>
                 </div>
                 <div class="col-md-6">
                     <div class="map-picker">
-                    <?= Html::img(Yii::$app->params['map_path'].'map-1.jpg') ?>
+                    <?= Html::img('../images/maps/'. $shop_model->map .'.gif') ?>
                     </div>
                     <p>Click on the map above to fill location.</p>
                 </div>
