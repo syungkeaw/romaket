@@ -15,6 +15,9 @@ use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use kartik\icons\Icon;
+
+Icon::map($this);  
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ShopItemSearch */
@@ -181,10 +184,11 @@ $this->registerJs("
                     $menu .= Html::a('<span class="glyphicon glyphicon-option-horizontal"></span>', [''], ['data-toggle'=>'dropdown']);
                     $menu .= DropdownX::widget([
                         'items' => [
-                            ['label' => 'Report', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 1]],
-                            ['label' => 'Like', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 2]],
+                            ['label' => Icon::show('thumbs-down'). 'Report', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 1]],
+                            ['label' => Icon::show('thumbs-up'). 'Like', 'url' => ['feedback', 'id' => $model->id, 'feedback_id' => 2]],
                             // '<li class="divider"></li>',
                         ],
+                        'encodeLabels' => false,
                     ]); 
                     $menu .= Html::endTag('div');
                     return $menu;

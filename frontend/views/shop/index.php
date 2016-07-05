@@ -13,6 +13,9 @@ use common\models\Shop;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
+use kartik\icons\Icon;
+
+Icon::map($this);  
 
 $this->title = 'My Shop';
 $this->params['breadcrumbs'][] = $this->title;
@@ -169,7 +172,7 @@ $this->registerJs("
             ],
             [
                 'value' => function($model){
-                    return '<span class="glyphicon glyphicon-thumbs-up"></span> '. $model->like. ' <span class="glyphicon glyphicon-thumbs-down"></span> ' .$model->report;
+                    return Icon::show('thumbs-up'). ' '. $model->like. ' '. Icon::show('thumbs-down') .' ' .$model->report;
                 },
                 'format' => 'raw',
             ],

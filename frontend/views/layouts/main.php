@@ -10,7 +10,9 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 use common\classes\RoHelper;
+use kartik\icons\Icon;
 
+Icon::map($this);  
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -30,6 +32,7 @@ AppAsset::register($this);
     background-attachment: fixed;
     background-size:cover;
 ">
+<div id="fb-root"></div>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -43,21 +46,23 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         // ['label' => 'Home', 'url' => Yii::$app->homeUrl],
-        ['label' => 'Eden', 'url' => ['/market/eden']],
+        ['label' => Icon::show('server'). 'Eden', 'url' => ['/market/eden']],
         // ['label' => 'Thor', 'url' => ['/market/thor']],
         // ['label' => 'Loki', 'url' => ['/market/loki']],
-        ['label' => 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
+        ['label' => Icon::show('shopping-cart'). 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
         // ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
-        ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
+        ['label' => Icon::show('user-plus'). 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Sign in', 'url' => ['/user/security/login']];
+        $menuItems[] = ['label' => Icon::show('sign-in'). 'Sign in', 'url' => ['/user/security/login']];
+        $menuItems[] = ['label' => Icon::show('facebook-square'). 'Facebook Login', 'url' => ['/user/security/auth?authclient=facebook']];
     } else {
-        $menuItems[] = ['label' => 'Logout (' . Yii::$app->user->identity->username . ')', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']];
+        $menuItems[] = ['label' => Icon::show('sign-out'). 'Logout (' . Yii::$app->user->identity->username . ')', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-confirm' => 'แน่ใจเหรอ?', 'data-method' => 'post']];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
+        'encodeLabels' => false,
     ]);
     NavBar::end();
     ?>
@@ -68,6 +73,16 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
+
+        
+    </div>
+
+    <div class="container" style="background: #f1f1f1">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="fb-page" data-href="https://www.facebook.com/ro108shop/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/ro108shop/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/ro108shop/">RO108</a></blockquote></div>
+            </div>
+        </div>
     </div>
 </div>
 

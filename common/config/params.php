@@ -8,4 +8,6 @@ return [
     'item_small_image_url' => '../web/images/items/small/',
     // 'item_large_image_url' => '../web/images/items/small/',
     // 'item_large_image_url' => 'http://imgs.ratemyserver.net/items/large/',
+
+    'icon-framework' => 'fa', // Font Awesome Icon framework
 ];

@@ -8,6 +8,9 @@ use frontend\assets\Select23Asset;
 use common\models\Item;
 use common\models\Shop;
 use yii\widgets\MaskedInput;
+use kartik\icons\Icon;
+
+Icon::map($this);  
 
 Select23Asset::register($this);
 
@@ -346,7 +349,7 @@ $this->registerCss("
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton($shop_model->isNewRecord ? 'Open Shop' : 'Update', ['class' => $shop_model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($shop_model->isNewRecord ? Icon::show('opencart'). 'Open Shop' : Icon::show('opencart'). 'Update Shop', ['class' => $shop_model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style' => 'width: 100%;']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
