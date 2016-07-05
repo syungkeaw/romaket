@@ -222,7 +222,7 @@ $this->registerCss("
                 </div>
                 <div class="col-md-6">
                     <div class="map-picker">
-                    <?= Html::img('../images/maps/'. $shop_model->map .'.gif') ?>
+                    <?= Html::img('../images/maps/'. ($shop_model->map ? $shop_model->map : 'alberta') .'.gif') ?>
                     </div>
                     <p>Click on the map above to fill location.</p>
                 </div>

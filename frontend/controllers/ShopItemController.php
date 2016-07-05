@@ -8,6 +8,8 @@ use common\models\ShopItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 
 /**
  * ShopItemController implements the CRUD actions for ShopItem model.
@@ -24,6 +26,16 @@ class ShopItemController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'update', 'delete', 'open', 'close'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -143,9 +155,17 @@ class ShopItemController extends Controller
     protected function findModel($id)
     {
         if (($model = ShopItem::findOne($id)) !== null) {
+            $this->authen($model);
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    protected function authen($model)
+    {
+        if($model->shop->created_by != Yii::$app->user->identity->id){
+            throw new ForbiddenHttpException('You are not allowed to access this page');
+        }
+    }    
 }

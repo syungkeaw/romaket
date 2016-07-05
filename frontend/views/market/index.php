@@ -47,7 +47,6 @@ $this->registerJs("
 <div class="shop-item-index">
 <?php Pjax::begin(); ?>
 <h3><?= $server ?> <small><?= Html::a('<span class="glyphicon glyphicon-refresh"></span> Clear', ['']) ?></small></h3>
-
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -168,7 +167,7 @@ $this->registerJs("
             [
                 'attribute' => 'updated_at',
                 'label' => 'Latest',
-                'format' => ['date', 'php:d/H:i'],
+                'format' => ['date', 'php:d-H:i'],
                 'filter' => false,
                 'headerOptions' => [
                     'class' => 'col-md-1'

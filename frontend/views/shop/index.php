@@ -35,7 +35,7 @@ $this->registerJs("
 <div class="row">  
     <div class="col-md-6">
         <p>
-            <?= Html::a('Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> Create Shop', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
     </div>
     <div class="col-md-6 text-right">
