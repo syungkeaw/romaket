@@ -88,7 +88,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Ro Item Beta <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Ro 108 Beta <?= date('Y') ?></p>
 
         <p class="pull-right"><?= '' ?></p>
     </div>

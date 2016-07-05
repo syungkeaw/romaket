@@ -163,8 +163,8 @@ $this->registerJs("
             [
                 'value' => function($model){
                     return $model->shop['status'] == 10 && $model['status'] == 10 ? 
-                        '<span class="glyphicon glyphicon-ok"></span>' : 
-                        '<span class="glyphicon glyphicon-remove"></span>';
+                        '<span class="glyphicon glyphicon-ok text-green"></span>' : 
+                        '<span class="glyphicon glyphicon-remove text-red"></span>';
                 },
                 'filter' => Html::dropDownList('ShopItemSearch[shop.status]', $searchModel['shop.status'], ['' => 'All','10' => 'O', '0' => 'C'], 
                 ['class' => 'form-control']),

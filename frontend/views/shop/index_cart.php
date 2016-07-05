@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title ellipsis" style="max-width: 250px !important;">
-                                       <?= $model->status ? '<span class="glyphicon glyphicon-ok"></span>' : '<span class="glyphicon glyphicon-remove"></span>' ?> <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $model->map ?> (<?= $model->location ?>)</small></h3>
+                                       <?= $model->status ? '<span class="glyphicon glyphicon-ok text-green"></span>' : '<span class="glyphicon glyphicon-remove text-red"></span>' ?> <?= '#'. $model->id ?> <?= $model->shop_name ?> <small><?= $model->map ?> (<?= $model->location ?>)</small></h3>
                                 </div>
                                 <div class="panel-body">
                                     <table class="table table-hover">

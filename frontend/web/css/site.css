@@ -161,6 +161,14 @@ input[readonly].form-control{
     background: #f0f0f0;
 }
 
+.text-green {
+    color:green;
+}
+
+.text-red {
+    color:red;
+}
+
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");/*!
  * bootswatch v3.3.6
  * Homepage: http://bootswatch.com
