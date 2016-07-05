@@ -12,10 +12,6 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
-        // 'user' => [
-        //     'identityClass' => 'common\models\User',
-        //     'enableAutoLogin' => true,
-        // ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -28,10 +24,23 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'request'=>[
+            'class' => 'common\classes\Request',
+            'web'=> '/frontend/web'
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // '/user/register' => '/user/registration/register',
+                // '/user/resend' => '/user/registration/resend',
+                // '/user/forgot' => '/user/recovery/request',
+                // '/user/login' => '/user/security/login',
+                // '/user/logout' => '/user/security/logout',
+
+                '<controller:\w+>/<id:\d+>/<name:.+>' => '<controller>/index',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
         'authClientCollection' => [

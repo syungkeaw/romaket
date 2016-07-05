@@ -54,43 +54,58 @@ $this->title = $model->item->nameSlot;
 <div class="shop-item-view">
 
     <h3><?= 
-    	Html::img(Yii::getAlias('@web'). '/images/items/large/'. ItemHelper::getImgFileName($model->item)). ' '.
+    	Html::img(Yii::getAlias('@web'). '/images/items/large/'. $model->item->source_id .'.gif'). ' '.
     	($model->enhancement ? '+'. $model->enhancement.' ' : '').
     	Html::encode($this->title)
     ?></h3>
 
+    <?php 
+    $attributes = [];
+
+    array_push($attributes, [
+        'label' => 'Price',
+        'value' => '<h4>'.number_format($model->price).' zeny</h4>',
+        'format' => 'raw',
+    ]);
+
+    if($model->shop['map'] && $model->shop['location']){
+        array_push($attributes, [
+            'label' => 'Location',
+            'value' => '<div class="map-picker">'.Html::img(Yii::getAlias('@web'). '/images/maps/'.$model->shop['map']. '.gif').'</div>',
+            'format' => 'raw',
+        ]);
+    }
+
+    if($model->card_1 || $model->card_2 || $model->card_3 || $model->card_4){
+        array_push($attributes, [
+            'label' => 'Cards',
+            'value' => ($model->card_1 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard1->source_id.'.gif') : ''). ' '.
+                        ($model->card_2 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard2->source_id.'.gif') : ''). ' '.
+                        ($model->card_3 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard3->source_id.'.gif') : ''). ' '.
+                        ($model->card_4 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard4->source_id.'.gif') : ''),
+            'format' => 'raw',
+        ]);
+    }
+
+    if($model->element){
+        array_push($attributes, [
+            'label' => 'Element',
+            'value' => ($model->very ? $very[$model->very] : '').' '.($label[$model->element] ? Html::img(Yii::getAlias('@web'). '/images/items/small/'.$label[$model->element]['icon'].'.gif').' <span class="label label-'.$label[$model->element]['label'].'">' .$elements[$model->element]. '</span>' : ''),
+            'format' => 'raw',
+        ]);
+    }
+
+    array_push($attributes,             
+        'amount',
+        'shop.shop_name',
+        'shop.character',
+        'created_at:datetime',
+        'updated_at:datetime');
+    ?>
+
     <?= DetailView::widget([
         'model' => $model,
-        'attributes' => [
-            [
-                'label' => 'Price',
-                'value' => '<h4>'.number_format($model->price).' zeny</h4>',
-                'format' => 'raw',
-            ],
-            [
-                'label' => 'Location',
-                'value' => '<div class="map-picker">'.Html::img(Yii::getAlias('@web'). '/images/maps/'.$model->shop['map']. '.gif').'</div>',
-                'format' => 'raw',
-            ],
-            [
-                'label' => 'Cards',
-                'value' => ($model->card_1 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard1->source_id.'.gif') : ''). ' '.
-                            ($model->card_2 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard2->source_id.'.gif') : ''). ' '.
-                            ($model->card_3 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard3->source_id.'.gif') : ''). ' '.
-                            ($model->card_4 ? Html::img(Yii::getAlias('@web'). '/images/items/large/'.$model->itemCard4->source_id.'.gif') : ''),
-                'format' => 'raw',
-            ],
-            [
-                'label' => 'Element',
-                'value' => ($model->very ? $very[$model->very] : '').' '.($label[$model->element] ? Html::img(Yii::getAlias('@web'). '/images/items/small/'.$label[$model->element]['icon'].'.gif').' <span class="label label-'.$label[$model->element]['label'].'">' .$elements[$model->element]. '</span>' : ''),
-                'format' => 'raw',
-            ],
-            'amount',
-            'shop.shop_name',
-            'shop.character',
-            'created_at:datetime',
-            'updated_at:datetime',
-        ],
+        'attributes' => $attributes,
     ]) ?>
 
 </div>

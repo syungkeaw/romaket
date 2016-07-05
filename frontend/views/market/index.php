@@ -23,7 +23,7 @@ Icon::map($this);
 /* @var $searchModel common\models\ShopItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ro Market';
+$this->title = 'Ro108 ซื้อขาย item';
 $elements = Item::getElements();
 $very = Item::getVeries();
 $label = [

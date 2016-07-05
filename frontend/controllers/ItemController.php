@@ -45,7 +45,7 @@ class ItemController extends Controller
     public function actionNewitem()
     {
         ini_set('max_execution_time', 300);
-        $url = 'http://ratemyserver.net/index.php?page=item_db&item_type=5&page_num=1'; 
+        $url = 'http://ratemyserver.net/index.php?page=item_db'; 
         $ro = new Ro();
 
         $type_id = 3;
