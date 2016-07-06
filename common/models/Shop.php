@@ -65,7 +65,8 @@ class Shop extends \yii\db\ActiveRecord
         return [
             [['shop_name', 'map'], 'required'],
             [['not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at', 'server'], 'integer'],
-            [['shop_name', 'location', 'character', 'map'], 'string', 'max' => 255],
+            [['shop_name', 'location', 'character', 'map'], 'string', 'max' => 50],
+            [['information'], 'string', 'max' => 255],
             ['not_found_count', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             // ['location', 'required', 'message' => 'Location cannot be blank. Please click position in the map below.'],
@@ -90,6 +91,7 @@ class Shop extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_by' => 'Updated By',
             'updated_at' => 'Updated At',
+            'information' => 'Information',
         ];
     }
 

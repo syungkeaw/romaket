@@ -229,6 +229,9 @@ $this->registerCss("
                     </div>
                     <p>Click on the map above to fill location.</p>
                 </div>
+                <div class="col-md-12">
+                    <?= $form->field($shop_model, 'information')->textArea(['rows' => '3', 'style' => 'resize: vertical;']) ?>
+                </div>
             </div>
         </div>
     </div>
