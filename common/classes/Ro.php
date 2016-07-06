@@ -36,6 +36,7 @@ class Ro {
 		$attr['item_weapon_lvl'] = $this->match('/Weapon Lvl<\/th>[\n\s]+<td class = \'bb\' align=\'right\'>(.*?)<\/td>/ms', $html, 1);
 		$attr['item_jobs'] = $this->match_all('/<img src=\'images\/bu2\.gif\'><\/td><td width=100>(.*?) <\/td>/ms', $html, 1);
 		$attr['item_description'] = strip_tags($this->match('/<td colspan=9 class=\'bb\'  valign=\'top\'>(.*?)<\/td><\/tr>/ms', $html, 1));
+		$attr['item_prefix_suffix'] = strip_tags($this->match('/Pre\/Suffix<\/th>[\n\s]+<td class = \'bb\' align=\'right\'>(.*?)<\/td>/ms', $html, 1));
 		return $attr;
 	}
 

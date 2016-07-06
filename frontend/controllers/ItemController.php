@@ -44,12 +44,12 @@ class ItemController extends Controller
 
     public function actionNewitem()
     {
-        ini_set('max_execution_time', 300);
-        $url = 'http://ratemyserver.net/index.php?page=item_db'; 
+        ini_set('max_execution_time', 1000);
+        $url = 'http://ratemyserver.net/index.php?page=re_item_db'; 
         $ro = new Ro();
 
         $type_id = 3;
-        for($i = 1; $i <= 136 ; $i++){
+        for($i = 1; $i <= 179 ; $i++){
 
             $items = $ro->getInfo($url, $type_id, $i);
 
@@ -63,11 +63,13 @@ class ItemController extends Controller
                 $item->item_type_id = $value['item_type_id'];
                 $item->item_type = $value['item_type'];
                 $item->item_class = $value['item_class'];
-                $item->item_attack = empty($value['item_attack']) ? 0 : $value['item_attack'];
+                $item->item_attack = empty($value['item_attack']) ? '0' : $value['item_attack'];
                 $item->item_defense = empty($value['item_defense']) ? 0 : $value['item_defense'];
                 $item->item_required_lvl = empty($value['item_required_lvl']) || $value['item_required_lvl'] == 'None' ? 0 : $value['item_required_lvl'];
                 $item->item_weapon_lvl = empty($value['item_weapon_lvl']) || $value['item_weapon_lvl'] == 'n/a' ? 0 : $value['item_weapon_lvl'];
                 $item->item_description = $value['item_description'];
+                $item->item_prefix_suffix = $value['item_prefix_suffix'];
+
 
                 $jobs = [];
 
@@ -118,7 +120,9 @@ class ItemController extends Controller
 
                 $error = $item->getErrors();
                 if(!empty($error)){
+                    echo 'item_id:'. $value['item_id']. '<br>';
                     echo 'item_slot:'. $value['item_slot']. '/' . $value['item_slot_spare']. '<br>';
+                    echo 'item_attack:'. $value['item_attack']. '<br>';
                     echo 'error-page:'. $i;
                     echo '<pre>';
                     print_r($error);

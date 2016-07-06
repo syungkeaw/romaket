@@ -24,11 +24,12 @@ class m160606_052930_create_item extends Migration
             'item_type_id' => $this->integer(2),
             'item_type' => $this->string(15),
             'item_class' => $this->string(15),
-            'item_attack' => $this->integer(4),
+            'item_attack' => $this->string(),
             'item_defense' => $this->integer(4),
             'item_required_lvl' => $this->integer(2),
             'item_weapon_lvl' => $this->integer(1),
             'item_description' => $this->string(),
+            'item_prefix_suffix' => $this->string(),
         ], $tableOptions);
     }
 

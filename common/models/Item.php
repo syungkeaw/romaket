@@ -69,8 +69,8 @@ class Item extends \yii\db\ActiveRecord
     {
         return [
             [['item_name'], 'required'],
-            [['source_id', 'item_slot', 'item_slot_spare', 'item_type_id', 'item_attack', 'item_defense', 'item_required_lvl', 'item_weapon_lvl', 'item_num_hand'], 'integer'],
-            [['item_name', 'item_description'], 'string'],
+            [['source_id', 'item_slot', 'item_slot_spare', 'item_type_id', 'item_defense', 'item_required_lvl', 'item_weapon_lvl', 'item_num_hand'], 'integer'],
+            [['item_name', 'item_description', 'item_prefix_suffix', 'item_attack'], 'string'],
             [['item_type', 'item_class'], 'string'],
             [['source_id'], 'unique'],
         ];
@@ -96,6 +96,7 @@ class Item extends \yii\db\ActiveRecord
             'item_required_lvl' => 'Item Required Lvl',
             'item_weapon_lvl' => 'Item Weapon Lvl',
             'item_description' => 'Item Description',
+            'item_prefix_suffix' => 'Item Prefix Suffix',
         ];
     }
 
