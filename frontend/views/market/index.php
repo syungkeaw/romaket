@@ -45,11 +45,31 @@ $this->registerJs("
     }
 ", View::POS_HEAD);
 
-?>
+$this->registerJs("
+    $(document).on('pjax:send', function() {
+        $('#loading').show();
+    });
+    $(document).on('pjax:complete', function() {
+      $('#loading').hide();
+    });
+", View::POS_READY);
 
+$this->registerCss("
+    #loading{
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        background-color: white;
+        z-index: 100;
+        display:none;
+    }
+");
+?>
+<div id="loading"><img src="../images/loading.gif" /></div>
 <div class="shop-item-index">
 <?php Pjax::begin(); ?>
 <h3><?= $server ?> <small><?= Html::a('<span class="glyphicon glyphicon-refresh"></span> Clear', ['']) ?></small></h3>
+
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
