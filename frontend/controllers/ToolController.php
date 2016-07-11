@@ -29,7 +29,7 @@ class ToolController extends Controller
         }
 
         // draw the blue ellipse
-        imagefilledellipse($image, $axis[0], $axis[1], 15, 15, $ellipseColor);
+        imagefilledellipse($image, $axis[0], $axis[1], 10, 10, $ellipseColor);
 
         // Output the image.
         header("Content-type: image/gif");
