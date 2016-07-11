@@ -240,7 +240,12 @@ $this->registerCss("
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel">
   <div class="modal-dialog" role="document" style="width:50%;min-width: 750px;">
     <div class="modal-content">
-      <iframe id="iframeDetail" frameborder="0" style="width:100%;" onload="iframeLoaded()"></iframe>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+            <iframe id="iframeDetail" frameborder="0" style="width:100%;" onload="iframeLoaded()"></iframe>
+        </div>
     </div>
   </div>
 </div>
