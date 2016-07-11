@@ -19,9 +19,6 @@ class ToolController extends Controller
         // Create a image from file.
         $image = imagecreatefromgif('../web/images/maps/'. $map);
 
-        // choose a color for the ellipse
-        $ellipseColor = imagecolorallocate($image, 0, 255, 0);
-
         $axis = explode(',', $location);
 
         if($axis[0] == '' || $axis[1] == ''){
@@ -29,7 +26,8 @@ class ToolController extends Controller
         }
 
         // draw the blue ellipse
-        imagefilledellipse($image, $axis[0], $axis[1], 10, 10, $ellipseColor);
+        imagefilledellipse($image, $axis[0] - 3, $axis[1] - 3, 14, 14, imagecolorallocate($image, 255, 0, 0));
+        imagefilledellipse($image, $axis[0] - 3, $axis[1] - 3, 7, 7, imagecolorallocate($image, 0, 255, 0));
 
         // Output the image.
         header("Content-type: image/gif");

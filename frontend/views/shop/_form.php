@@ -54,8 +54,8 @@ $this->registerJs("
             })
         );
 
-        var x = e.pageX - origin.left;
-        var y = e.pageY - origin.top;
+        var x = e.pageX - origin.left - 5;
+        var y = e.pageY - origin.top - 5;
 
         $('#shop-location').val(x + ',' + y);
 
@@ -225,7 +225,7 @@ $this->registerCss("
                 </div>
                 <div class="col-md-6">
                     <div class="map-picker">
-                    <?= Html::img('../images/maps/'. ($shop_model->map ? $shop_model->map : 'alberta') .'.gif') ?>
+                    <?= Html::img(Yii::getAlias('@web').'/images/maps/'. ($shop_model->map ? $shop_model->map : 'alberta') .'.gif') ?>
                     </div>
                     <p>Click on the map above to fill location.</p>
                 </div>
