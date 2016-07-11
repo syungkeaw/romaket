@@ -13,7 +13,6 @@ use common\models\Shop;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use kartik\dropdown\DropdownX;
-use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use kartik\icons\Icon;
 
@@ -64,6 +63,7 @@ $this->registerCss("
         display:none;
     }
 ");
+
 ?>
 <div id="loading"><img src="../images/loading.gif" /></div>
 <div class="shop-item-index">
@@ -81,7 +81,12 @@ $this->registerCss("
                 'value' => function($model){
                     $item = Html::img(Yii::getAlias('@web'). '/images/items/small/'.
                         ItemHelper::getImgFileName($model->item)) .' '.
-                        Html::a($model->item['nameSlot'], '#', ['onclick' => "detail=popupwindow('".Url::to(['market/detail', 'id' => $model->id])."','detail','900','900'); return false;"]);
+                        Html::a($model->item['nameSlot'], '#', [
+                            'class' => 'modalButton',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#detailModal',
+                            'onClick' => '$("#detailModal iframe").attr("src", "'. Url::to(['market/detail', 'id' => $model->id]) .'");',
+                        ]);
                     return $item;
                 },
                 'format' => 'raw',
@@ -221,5 +226,23 @@ $this->registerCss("
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
+<script type="text/javascript">
+    function iframeLoaded() {
+        var iFrameID = document.getElementById('iframeDetail');
+        if(iFrameID) {
+            // here you can make the height, I delete it first, then I make it again
+            iFrameID.height = "";
+            iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+        }   
+    }
+</script>   
+<!-- Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel">
+  <div class="modal-dialog" role="document" style="width:50%;min-width: 750px;">
+    <div class="modal-content">
+      <iframe id="iframeDetail" frameborder="0" style="width:100%;" onload="iframeLoaded()"></iframe>
+    </div>
+  </div>
+</div>
 
 

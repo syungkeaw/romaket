@@ -34,7 +34,7 @@ foreach($item_model as $item){
 $this->registerJs("
     $('#shop-map').change(function(){
         var map = $('.map-picker>img');
-        map.attr('src', '../images/maps/' + $(this).val() + '.gif');
+        map.attr('src', '".Yii::getAlias('@web')."/images/maps/' + $(this).val() + '.gif');
         $('div.dot').remove();
         $('#shop-location').val('');
     });
@@ -54,8 +54,8 @@ $this->registerJs("
             })
         );
 
-        var x = e.pageX - origin.left - 5;
-        var y = e.pageY - origin.top - 5;
+        var x = e.pageX - origin.left - 7;
+        var y = e.pageY - origin.top - 7;
 
         $('#shop-location').val(x + ',' + y);
 

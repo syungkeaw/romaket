@@ -48,7 +48,7 @@ $this->title = $model->item->nameSlot;
     if($model->shop['map'] && $model->shop['location']){
         array_push($attributes, [
             'label' => 'Location',
-            'value' => Html::img(Yii::$app->request->hostInfo. '/ro108/tool/shop-location?map='. $model->shop['map']. '.gif&location='. $model->shop['location'], ['class' => 'img-responsive']),
+            'value' => Html::img(Yii::$app->request->hostInfo. '/ro108/tool/shop-location?map='. $model->shop['map']. '.gif&location='. $model->shop['location'], ['style' => 'width: 200px; height:200px;']),
             'format' => 'raw',
         ]);
     }
