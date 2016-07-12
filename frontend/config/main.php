@@ -38,9 +38,17 @@ return [
                 // '/user/login' => '/user/security/login',
                 // '/user/logout' => '/user/security/logout',
 
+                '<server:eden>/<controller>' => 'eden/<controller>/index',
+                '<server:eden>/<controller>/<action:\w*>' => 'eden/<controller>/<action>',
+                '<server:thor>/<controller>' => 'thor/<controller>/index',
+                '<server:thor>/<controller>/<action:\w*>' => 'thor/<controller>/<action>',
+                '<server:loki>/<controller>' => 'loki/<controller>/index',
+                '<server:loki>/<controller>/<action:\w*>' => 'loki/<controller>/<action>',
+
                 '<controller:\w+>/<id:\d+>/<name:.+>' => '<controller>/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+
             ],
         ],
         'authClientCollection' => [
@@ -48,8 +56,8 @@ return [
             'clients' => [
                 'facebook' => [
                     'class'        => 'dektrium\user\clients\Facebook',
-                    'clientId'     => '739785062828151',
-                    'clientSecret' => '80a1d1ab17182a3afd03f2485ece6b10',
+                    'clientId'     => '474327099373950',
+                    'clientSecret' => '9917a1e5591b8e1cda02e22d89f9cd9f',
                     'viewOptions' => ['popupWidth' => 1024, 'popupHeight' => 860,]  
                 ],
                 // 'twitter' => [

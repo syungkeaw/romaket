@@ -25,7 +25,7 @@ class m160606_115915_create_shop extends Migration
             'character' => $this->string(),
             'not_found_count' => $this->integer(),
             'status' => $this->integer(),
-            'server' => $this->integer(),
+            'server' => $this->string(),
             'created_by' => $this->integer(),
             'created_at' => $this->integer(),
             'updated_by' => $this->integer(),

@@ -27,12 +27,6 @@ class Shop extends \yii\db\ActiveRecord
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;   
 
-    public static $server = [
-        1 => 'Eden',
-        // 2 => 'Thor',
-        // 3 => 'Loki',
-    ];
-
     public function behaviors()
     {
         return [
@@ -64,8 +58,8 @@ class Shop extends \yii\db\ActiveRecord
     {
         return [
             [['shop_name', 'map'], 'required'],
-            [['not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at', 'server'], 'integer'],
-            [['shop_name', 'location', 'character', 'map'], 'string', 'max' => 50],
+            [['not_found_count', 'status', 'created_by', 'created_at', 'updated_by', 'updated_at'], 'integer'],
+            [['shop_name', 'location', 'character', 'map', 'server'], 'string', 'max' => 50],
             [['information'], 'string', 'max' => 255],
             ['not_found_count', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],

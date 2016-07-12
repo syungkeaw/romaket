@@ -27,10 +27,10 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body style="
-    background: url('../images/background-ragnarok-online-2.jpg');
+/*    background: url('../images/background-ragnarok-online-2.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size:cover;
+    background-size:cover;*/
 ">
 <div id="fb-root"></div>
 <?php $this->beginBody() ?>
@@ -46,16 +46,14 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         // ['label' => 'Home', 'url' => Yii::$app->homeUrl],
-        ['label' => Icon::show('server'). 'Eden', 'url' => ['/market/eden']],
-        // ['label' => 'Thor', 'url' => ['/market/thor']],
-        // ['label' => 'Loki', 'url' => ['/market/loki']],
-        ['label' => Icon::show('shopping-cart'). 'My Shop', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
-        // ['label' => 'Setting', 'url' => ['/shop/index'], 'visible' => !Yii::$app->user->isGuest],
-        ['label' => Icon::show('user-plus'). 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
+        ['label' => Icon::show('server'). 'Eden', 'url' => ['/eden/market'], 'options' => Yii::$app->request->get('server') == 'eden' ? ['class' => 'active'] : []],
+        ['label' => Icon::show('server'). 'Thor', 'url' => ['/thor/market'], 'options' => Yii::$app->request->get('server') == 'thor' ? ['class' => 'active'] : []],
+        ['label' => Icon::show('server'). 'Loki', 'url' => ['/loki/market'], 'options' => Yii::$app->request->get('server') == 'loki' ? ['class' => 'active'] : []],
+        ['label' => Icon::show('user-plus'). Yii::t('app', 'Register'), 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => Icon::show('sign-in'). 'Sign in', 'url' => ['/user/security/login']];
-        $menuItems[] = ['label' => Icon::show('facebook-square'). 'Facebook Login', 'url' => ['/user/security/auth?authclient=facebook']];
+        $menuItems[] = ['label' => Icon::show('sign-in'). Yii::t('app', 'Sign in'), 'url' => ['/user/security/login']];
+        $menuItems[] = ['label' => Icon::show('facebook-square'). Yii::t('app', 'Facebook Login'), 'url' => ['/user/security/auth?authclient=facebook']];
     } else {
         $menuItems[] = ['label' => Icon::show('sign-out'). 'Logout (' . Yii::$app->user->identity->username . ')', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-confirm' => 'แน่ใจเหรอ?', 'data-method' => 'post']];
     }

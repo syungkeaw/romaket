@@ -20,6 +20,5 @@ return [
 	        ],
 	    ],
     ],
-    'defaultRoute' => 'market',
     'timeZone' => 'Asia/Bangkok',
 ];
